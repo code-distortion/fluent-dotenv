@@ -1,0 +1,55 @@
+{
+    "name": "code-distortion/fluent-dotenv",
+    "description": "A wrapper with a fluent interface for new and old versions of vlucas/phpdotenv",
+    "keywords": [
+        ".env",
+        "env",
+        "config",
+        "dotenv",
+        "environment",
+        "phpdotenv",
+        "polyfill",
+        "symfony dotenv",
+        "vlucas",
+        "vlucas phpdotenv",
+        "wrapper"
+    ],
+    "homepage": "https://github.com/code-distortion/fluent-dotenv",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Tim Chandler",
+            "email": "tim@code-distortion.net"
+        }
+    ],
+    "require": {
+        "php": "^7.0",
+        "ext-mbstring": "*",
+        "vlucas/phpdotenv": "^1.0 || ^2.0 || ^3.0 || ^4.0 || ^5.0"
+    },
+    "require-dev": {
+        "jchook/phpunit-assert-throws": "^1.0",
+        "phpstan/phpstan": "^0.9 || ^0.10 || ^0.11 || ^0.12",
+        "phpunit/phpunit": "~4.8 || ^5.0 || ^6.0 || ^7.0 || ^8.0 || ^9.0",
+        "squizlabs/php_codesniffer": "^3.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "CodeDistortion\\FluentDotEnv\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "CodeDistortion\\FluentDotEnv\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "phpstan": "vendor/bin/phpstan analyse -c phpstan.neon --level=8 .",
+        "phpcs": "vendor/bin/phpcs ."
+    },
+    "config": {
+        "sort-packages": true
+    }
+}
