@@ -8,7 +8,7 @@
 [![Buy us a tree](https://img.shields.io/badge/treeware-%F0%9F%8C%B3-lightgreen?style=flat-square)](https://offset.earth/treeware?gift-trees)
 [![Contributor Covenant](https://img.shields.io/badge/contributor%20covenant-v2.0%20adopted-ff69b4.svg?style=flat-square)](CODE_OF_CONDUCT.md)
 
-***code-distortion/fluent-dotenv*** is a wrapper with a fluent interface for new and old versions of [vlucas/phpdotenv](https://github.com/vlucas/phpdotenv).
+***code-distortion/fluent-dotenv*** is a wrapper with a fluent interface for new and old versions of [vlucas/phpdotenv](https://github.com/vlucas/phpdotenv), allowing you to easily read values from .env files.
 
 ## Introduction
 
@@ -18,8 +18,6 @@ First released in 2013, [vlucas/phpdotenv](https://github.com/vlucas/phpdotenv) 
 
 Sometimes when you're building a package you need it to work with multiple versions of vlucas/phpdotenv so your own package can provide coverage. This was the original motivation behind this package.
 
-***NOTE:*** Over time, vlucas/phpdotenv has improved the way it reads values from .env files (eg. multi-line variables). The underlying version you have will determine how values in .env files are read.
-
 ## Overview
 
 This package provides a new fluent interface for vlucas/phpdotenv features, including the ability to:
@@ -27,7 +25,7 @@ This package provides a new fluent interface for vlucas/phpdotenv features, incl
 - Specify values to explicitly *pick* or *ignore*,
 - Specify values that are *required*,
 - Perform validation - make sure values are *not empty*, are *integers*, *booleans*, are *limited to a specific set of values*, match a *regex* or validate via a *callback*,
-- Populate *$_GET* and *$_SERVER* values if you like, choosing whether to override values that already exist or not.
+- Populate *$_ENV* and *$_SERVER* values if you like, choosing whether to override values that already exist or not.
 
 ## Installation
 
@@ -51,15 +49,17 @@ $fDotEnv = FluentDotEnv::new()->load(['path/to/.env', 'path/to/another.env']);
 // don't throw an exception if the file doesn't exist
 $fDotEnv = FluentDotEnv::new()->safeLoad('path/to/missing.env');
 
-// get all the values
+// get all the values as an associative array
 $allValues = $fDotEnv->all();
 
 // get a single value
 $host = $fDotEnv->get('HOST');
 
-// get several values (will be returned as an associative array)
+// get several values (returned as an associative array)
 $dbCredentials = $fDotEnv->get(['HOST', 'PORT', 'USERNAME', 'PASSWORD']);
 ```
+
+***NOTE:*** Over time, vlucas/phpdotenv has improved the way it reads values from .env files (eg. multi-line variables). The underlying version you have will determine how values in .env files are read.
 
 ### Filtering
 
@@ -73,7 +73,7 @@ $fDotEnv = FluentDotEnv::new()
     ->load('path/to/.env');
 ```
 
-Likewise particular keys can be ignored:
+Conversely, particular keys can be ignored:
 
 ``` php
 $fDotEnv = FluentDotEnv::new()

@@ -1,6 +1,6 @@
 {
     "name": "code-distortion/fluent-dotenv",
-    "description": "A wrapper with a fluent interface for new and old versions of vlucas/phpdotenv",
+    "description": "A wrapper with a fluent interface for new and old versions of vlucas/phpdotenv, allowing you to easily read values from .env files",
     "keywords": [
         ".env",
         "env",
