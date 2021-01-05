@@ -45,7 +45,7 @@ class FluentDotEnvTest extends PHPUnitTestCase
     protected function newFluentDotEnv()
     {
         $fDotEnv = FluentDotEnv::new();
-        if (file_exists(__DIR__.'/../../vendor/symfony/dotenv')) {
+        if (file_exists(__DIR__ . '/../../vendor/symfony/dotenv')) {
             $fDotEnv->useSymfonyDotEnv();
         }
         return $fDotEnv;
@@ -508,14 +508,14 @@ class FluentDotEnvTest extends PHPUnitTestCase
                 function () use (&$fDotEnv, $useSafeLoad, $envFilename) {
 
                     ($useSafeLoad
-                        ? $fDotEnv->safeLoad(__DIR__.'/input/'.$envFilename)
-                        : $fDotEnv->load(__DIR__.'/input/'.$envFilename));
+                        ? $fDotEnv->safeLoad(__DIR__ . '/input/' . $envFilename)
+                        : $fDotEnv->load(__DIR__ . '/input/' . $envFilename));
                 }
             );
         } else {
             $values = ($useSafeLoad
-                ? $fDotEnv->safeLoad(__DIR__.'/input/'.$envFilename)->all()
-                : $fDotEnv->load(__DIR__.'/input/'.$envFilename)->all());
+                ? $fDotEnv->safeLoad(__DIR__ . '/input/' . $envFilename)->all()
+                : $fDotEnv->load(__DIR__ . '/input/' . $envFilename)->all());
 
             $this->assertSame($expectedValues, $values);
 //            foreach ($expectedGetenv as $key => $value) {
@@ -568,7 +568,7 @@ class FluentDotEnvTest extends PHPUnitTestCase
 
             return [
                 // ->integer('KEY')
-                $name.' 1' => [
+                $name . ' 1' => [
                     'methodsAndParams' => [
                         [
                             'method' => $method,
@@ -579,7 +579,7 @@ class FluentDotEnvTest extends PHPUnitTestCase
                 ],
                 // ->integer('KEY')
                 // ->integer('INVALID_KEY')
-                $name.' 2' => [
+                $name . ' 2' => [
                     'methodsAndParams' => [
                         [
                             'method' => $method,
@@ -595,7 +595,7 @@ class FluentDotEnvTest extends PHPUnitTestCase
                 ],
                 // ->integer('INVALID_KEY')
                 // ->integer('KEY')
-                $name.' 3' => [
+                $name . ' 3' => [
                     'methodsAndParams' => [
                         [
                             'method' => $method,
@@ -610,7 +610,7 @@ class FluentDotEnvTest extends PHPUnitTestCase
                     'expectedException' => $expectedException,
                 ],
                 // ->integer(['KEY', 'INVALID_KEY'])
-                $name.' 4' => [
+                $name . ' 4' => [
                     'methodsAndParams' => [
                         [
                             'method' => $method,
@@ -622,7 +622,7 @@ class FluentDotEnvTest extends PHPUnitTestCase
                 ],
                 // ->integer(['KEY'])
                 // ->integer(['INVALID_KEY'])
-                $name.' 5' => [
+                $name . ' 5' => [
                     'methodsAndParams' => [
                         [
                             'method' => $method,
@@ -638,7 +638,7 @@ class FluentDotEnvTest extends PHPUnitTestCase
                 ],
                 // ->integer(['INVALID_KEY'])
                 // ->integer(['KEY'])
-                $name.' 6' => [
+                $name . ' 6' => [
                     'methodsAndParams' => [
                         [
                             'method' => $method,
@@ -653,7 +653,7 @@ class FluentDotEnvTest extends PHPUnitTestCase
                     'expectedException' => $expectedException,
                 ],
                 // ->integer('KEY', 'INVALID_KEY')
-                $name.' 7' => [
+                $name . ' 7' => [
                     'methodsAndParams' => [
                         [
                             'method' => $method,
@@ -664,7 +664,7 @@ class FluentDotEnvTest extends PHPUnitTestCase
                     'expectedException' => $expectedException,
                 ],
                 // ->integer('INVALID_KEY', 'KEY')
-                $name.' 8' => [
+                $name . ' 8' => [
                     'methodsAndParams' => [
                         [
                             'method' => $method,
@@ -690,7 +690,7 @@ class FluentDotEnvTest extends PHPUnitTestCase
 
             return [
                 // ->regex('KEY', '/^valid$/');
-                $name.' 1' => [
+                $name . ' 1' => [
                     'methodsAndParams' => [
                         [
                             'method' => $method,
@@ -700,7 +700,7 @@ class FluentDotEnvTest extends PHPUnitTestCase
                 ],
                 // ->regex('KEY', '/^valid$/');
                 // ->regex('KEY', '/^invalid$/');
-                $name.' 2' => [
+                $name . ' 2' => [
                     'methodsAndParams' => [
                         [
                             'method' => $method,
@@ -715,7 +715,7 @@ class FluentDotEnvTest extends PHPUnitTestCase
                 ],
                 // ->regex('KEY', '/^invalid$/');
                 // ->regex('KEY', '/^valid$/');
-                $name.' 3' => [
+                $name . ' 3' => [
                     'methodsAndParams' => [
                         [
                             'method' => $method,
@@ -729,7 +729,7 @@ class FluentDotEnvTest extends PHPUnitTestCase
                     'expectedException' => $expectedException,
                 ],
                 // ->regex(['KEY1', 'KEY2'], '/^valid$/');
-                $name.' 4' => [
+                $name . ' 4' => [
                     'methodsAndParams' => [
                         [
                             'method' => $method,
@@ -739,7 +739,7 @@ class FluentDotEnvTest extends PHPUnitTestCase
                 ],
                 // ->regex(['KEY1', 'KEY2'], '/^valid$/');
                 // ->regex(['KEY1', 'KEY2'], '/^invalid$/');
-                $name.' 5' => [
+                $name . ' 5' => [
                     'methodsAndParams' => [
                         [
                             'method' => $method,
@@ -754,7 +754,7 @@ class FluentDotEnvTest extends PHPUnitTestCase
                 ],
                 // ->regex(['KEY1', 'KEY2'], '/^invalid$/');
                 // ->regex(['KEY1', 'KEY2'], '/^valid$/');
-                $name.' 6' => [
+                $name . ' 6' => [
                     'methodsAndParams' => [
                         [
                             'method' => $method,
@@ -768,7 +768,7 @@ class FluentDotEnvTest extends PHPUnitTestCase
                     'expectedException' => $expectedException,
                 ],
                 // ->regex(['KEY' => '/^valid$/']);
-                $name.' 7' => [
+                $name . ' 7' => [
                     'methodsAndParams' => [
                         [
                             'method' => $method,
@@ -778,7 +778,7 @@ class FluentDotEnvTest extends PHPUnitTestCase
                 ],
                 // ->regex(['KEY' => '/^valid$/']);
                 // ->regex(['KEY' => '/^invalid$/']);
-                $name.' 8' => [
+                $name . ' 8' => [
                     'methodsAndParams' => [
                         [
                             'method' => $method,
@@ -793,7 +793,7 @@ class FluentDotEnvTest extends PHPUnitTestCase
                 ],
                 // ->regex(['KEY' => '/^invalid$/']);
                 // ->regex(['KEY' => '/^valid$/']);
-                $name.' 9' => [
+                $name . ' 9' => [
                     'methodsAndParams' => [
                         [
                             'method' => $method,
@@ -918,11 +918,11 @@ class FluentDotEnvTest extends PHPUnitTestCase
             $this->assertThrows(
                 $expectedException,
                 function () use (&$fDotEnv) {
-                    $fDotEnv->load(__DIR__.'/input/.env');
+                    $fDotEnv->load(__DIR__ . '/input/.env');
                 }
             );
         } else {
-            $values = $fDotEnv->load(__DIR__.'/input/.env')->all();
+            $values = $fDotEnv->load(__DIR__ . '/input/.env')->all();
             $this->assertSame($expectedValues, $values);
         }
     }
@@ -1095,7 +1095,7 @@ class FluentDotEnvTest extends PHPUnitTestCase
     ) {
 
         $this->customSetUp();
-        $fDotEnv = $this->newFluentDotEnv()->load(__DIR__.'/input/.env');
+        $fDotEnv = $this->newFluentDotEnv()->load(__DIR__ . '/input/.env');
 
         if ($expectedException) {
             $this->assertThrows(
@@ -1122,7 +1122,7 @@ class FluentDotEnvTest extends PHPUnitTestCase
     {
         $this->customSetUp();
 
-        $fDotEnv = $this->newFluentDotEnv()->load(__DIR__.'/input/.env')->pick('NEW_KEY')->pick('EMPTY_KEY');
+        $fDotEnv = $this->newFluentDotEnv()->load(__DIR__ . '/input/.env')->pick('NEW_KEY')->pick('EMPTY_KEY');
         $this->assertSame(
             [
                 'NEW_KEY' => 'new-value1',
@@ -1131,7 +1131,7 @@ class FluentDotEnvTest extends PHPUnitTestCase
             $fDotEnv->all()
         );
 
-        $fDotEnv = $this->newFluentDotEnv()->load(__DIR__.'/input/.env');
+        $fDotEnv = $this->newFluentDotEnv()->load(__DIR__ . '/input/.env');
         $this->assertSame(
             [
                 'INITIAL_KEY' => 'override-value',
@@ -1156,28 +1156,28 @@ class FluentDotEnvTest extends PHPUnitTestCase
 
         // passed in an array
         $fDotEnv = $this->newFluentDotEnv()
-            ->load([__DIR__.'/input/1.env']);
+            ->load([__DIR__ . '/input/1.env']);
         $this->assertSame(['MY_VALUE1' => 'a'], $fDotEnv->all());
 
         $fDotEnv = $this->newFluentDotEnv()
-            ->load([__DIR__.'/input/1.env', __DIR__.'/input/2.env']);
+            ->load([__DIR__ . '/input/1.env', __DIR__ . '/input/2.env']);
         $this->assertSame(['MY_VALUE1' => 'b'], $fDotEnv->all());
 
         $fDotEnv = $this->newFluentDotEnv()
-            ->load([__DIR__.'/input/2.env', __DIR__.'/input/1.env']);
+            ->load([__DIR__ . '/input/2.env', __DIR__ . '/input/1.env']);
         $this->assertSame(['MY_VALUE1' => 'a'], $fDotEnv->all());
 
         // passed as separate parameters
         $fDotEnv = $this->newFluentDotEnv()
-            ->load(__DIR__.'/input/1.env');
+            ->load(__DIR__ . '/input/1.env');
         $this->assertSame(['MY_VALUE1' => 'a'], $fDotEnv->all());
 
         $fDotEnv = $this->newFluentDotEnv()
-            ->load(__DIR__.'/input/1.env', __DIR__.'/input/2.env');
+            ->load(__DIR__ . '/input/1.env', __DIR__ . '/input/2.env');
         $this->assertSame(['MY_VALUE1' => 'b'], $fDotEnv->all());
 
         $fDotEnv = $this->newFluentDotEnv()
-            ->load(__DIR__.'/input/2.env', __DIR__.'/input/1.env');
+            ->load(__DIR__ . '/input/2.env', __DIR__ . '/input/1.env');
         $this->assertSame(['MY_VALUE1' => 'a'], $fDotEnv->all());
 
         // ->load called multiple times
@@ -1185,8 +1185,8 @@ class FluentDotEnvTest extends PHPUnitTestCase
             AlreadyLoadedException::class,
             function () {
                 $this->newFluentDotEnv()
-                    ->load(__DIR__.'/input/1.env')
-                    ->load(__DIR__.'/input/2.env');
+                    ->load(__DIR__ . '/input/1.env')
+                    ->load(__DIR__ . '/input/2.env');
             }
         );
 
@@ -1194,8 +1194,8 @@ class FluentDotEnvTest extends PHPUnitTestCase
             AlreadyLoadedException::class,
             function () {
                 $this->newFluentDotEnv()
-                    ->safeLoad(__DIR__.'/input/1.env')
-                    ->safeLoad(__DIR__.'/input/2.env');
+                    ->safeLoad(__DIR__ . '/input/1.env')
+                    ->safeLoad(__DIR__ . '/input/2.env');
             }
         );
 
@@ -1204,24 +1204,24 @@ class FluentDotEnvTest extends PHPUnitTestCase
             InvalidPathException::class,
             function () {
                 $this->newFluentDotEnv()
-                    ->load([__DIR__.'/input/missing.env']);
+                    ->load([__DIR__ . '/input/missing.env']);
             }
         );
         $this->assertThrows(
             InvalidPathException::class,
             function () {
                 $this->newFluentDotEnv()
-                    ->load([__DIR__.'/input/1.env', __DIR__.'/input/missing.env', __DIR__.'/input/2.env']);
+                    ->load([__DIR__ . '/input/1.env', __DIR__ . '/input/missing.env', __DIR__ . '/input/2.env']);
             }
         );
 
         // missing file - but with safeLoad()
         $fDotEnv = $this->newFluentDotEnv()
-            ->safeLoad(__DIR__.'/input/missing.env');
+            ->safeLoad(__DIR__ . '/input/missing.env');
         $this->assertSame([], $fDotEnv->all());
 
         $fDotEnv = $this->newFluentDotEnv()
-            ->safeLoad(__DIR__.'/input/1.env', __DIR__.'/input/missing.env', __DIR__.'/input/2.env');
+            ->safeLoad(__DIR__ . '/input/1.env', __DIR__ . '/input/missing.env', __DIR__ . '/input/2.env');
         $this->assertSame(['MY_VALUE1' => 'b'], $fDotEnv->all());
     }
 
@@ -1286,10 +1286,11 @@ class FluentDotEnvTest extends PHPUnitTestCase
      * @param string $castMethod The cast method to call.
      * @param string $key        The key to retrieve.
      * @param mixed  $expected   The expected result from the cast call.
+     * @return void
      */
     public function can_cast_properly(string $castMethod, string $key, $expected)
     {
-        $fDotEnv = $this->newFluentDotEnv()->safeLoad(__DIR__.'/input/cast.env');
+        $fDotEnv = $this->newFluentDotEnv()->safeLoad(__DIR__ . '/input/cast.env');
         $this->assertSame($expected, $fDotEnv->$castMethod($key));
     }
 
@@ -1467,11 +1468,12 @@ class FluentDotEnvTest extends PHPUnitTestCase
      *
      * @param string              $method   The method to fetch values with.
      * @param string[]|string[][] $params   The parameters to pass.
-     * @param mixed[]             $expected The expected result from the cast call.
+     * @param mixed[]|boolean     $expected The expected result from the cast call.
+     * @return void
      */
     public function can_get_multiple_values(string $method, array $params, $expected)
     {
-        $fDotEnv = $this->newFluentDotEnv()->safeLoad(__DIR__.'/input/many_values.env');
+        $fDotEnv = $this->newFluentDotEnv()->safeLoad(__DIR__ . '/input/many_values.env');
 
         $callable = [$fDotEnv, $method];
         if (is_callable($callable)) {

@@ -57,7 +57,7 @@ class VLucasAdapterV4 extends AbstractVLucasAdapter
 
         // ImportAndPopulate determines what was imported based on $_SERVER
         // and chooses what to update based on that
-        $adapters = [new ServerConstAdapter];
+        $adapters = [new ServerConstAdapter()];
         $repository = RepositoryBuilder::create()->withReaders($adapters)->withWriters($adapters)->make();
         Dotenv::create($repository, $directory, $filename)->load();
 

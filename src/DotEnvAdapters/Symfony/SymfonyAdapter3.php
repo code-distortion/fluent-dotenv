@@ -61,7 +61,7 @@ class SymfonyAdapter3 implements DotEnvAdapterInterface
         }
         $_SERVER = $_ENV = [];
 
-        (new Dotenv)->load($path);
+        (new Dotenv())->load($path);
         unset($_SERVER['SYMFONY_DOTENV_VARS']);
 
         return new ValueStore($_SERVER);

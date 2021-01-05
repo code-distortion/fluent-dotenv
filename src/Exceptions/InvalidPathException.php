@@ -18,6 +18,6 @@ class InvalidPathException extends FluentDotEnvException
      */
     public static function invalidPath(string $path, Exception $e): self
     {
-        return new self('Unable to read from the "'.$path.'" environment file', 0, $e);
+        return new self("Unable to read from the \"$path\" environment file", 0, $e);
     }
 }

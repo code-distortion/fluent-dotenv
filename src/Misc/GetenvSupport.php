@@ -57,7 +57,7 @@ class GetenvSupport
                 // update if different
                 $value = $values[$key];
                 if ((!isset($currentValues[$key])) || ($currentValues[$key] != $value)) {
-                    putenv($key.'='.$value);
+                    putenv("$key=$value");
                 }
             } else {
                 // remove

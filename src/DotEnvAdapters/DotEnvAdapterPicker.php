@@ -61,15 +61,15 @@ class DotEnvAdapterPicker
     public static function detectVLucasPhpDotEnv()
     {
         if (method_exists(DotenvV5::class, 'createUnsafeImmutable')) {
-            return new VLucasAdapterV5;
+            return new VLucasAdapterV5();
         } elseif (method_exists(DotenvV4::class, 'createImmutable')) {
-            return new VLucasAdapterV4;
+            return new VLucasAdapterV4();
         } elseif (class_exists(DotenvFactoryV3::class)) {
-            return new VLucasAdapterV3;
+            return new VLucasAdapterV3();
         } elseif (class_exists(DotenvV2::class)) {
-            return new VLucasAdapterV2;
+            return new VLucasAdapterV2();
         } elseif (class_exists(DotenvV1::class)) {
-            return new VLucasAdapterV1;
+            return new VLucasAdapterV1();
         }
         return null;
     }
@@ -91,9 +91,9 @@ class DotEnvAdapterPicker
             // return type in the Dotenv::load(..) method which was added in version 4.0.0
             $reflectionMethod = new ReflectionMethod(SymfonyDotenv::class, 'load');
             if ((string) $reflectionMethod->getReturnType() == 'void') {
-                return new SymfonyAdapter4Plus;
+                return new SymfonyAdapter4Plus();
             }
-            return new SymfonyAdapter3;
+            return new SymfonyAdapter3();
         }
         return null;
     }

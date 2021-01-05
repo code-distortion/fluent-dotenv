@@ -58,7 +58,7 @@ class VLucasAdapterV3 extends AbstractVLucasAdapter
 
         // ImportAndPopulate determines what was imported based on $_SERVER
         // and chooses what to update based on that
-        $factory = new DotenvFactory([new ServerConstAdapter]);
+        $factory = new DotenvFactory([new ServerConstAdapter()]);
         $dotenv = Dotenv::create($directory, $filename, $factory);
         $dotenv->load();
 

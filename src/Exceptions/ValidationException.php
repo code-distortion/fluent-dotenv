@@ -15,7 +15,7 @@ class ValidationException extends FluentDotEnvException
      */
     public static function missingKey(string $key): self
     {
-        return new self('Required key '.$key.' is missing');
+        return new self("Required key $key is missing");
     }
 
     /**
@@ -26,7 +26,7 @@ class ValidationException extends FluentDotEnvException
      */
     public static function isEmpty(string $key): self
     {
-        return new self($key.' is empty');
+        return new self("$key is empty");
     }
 
     /**
@@ -38,7 +38,7 @@ class ValidationException extends FluentDotEnvException
      */
     public static function notAnInteger(string $key, $value): self
     {
-        return new self($key.' value "'.$value.'" is not an integer');
+        return new self("$key value \"$value\" is not an integer");
     }
 
     /**
@@ -50,7 +50,7 @@ class ValidationException extends FluentDotEnvException
      */
     public static function notABoolean(string $key, $value): self
     {
-        return new self($key.' value "'.$value.'" is not a boolean');
+        return new self("$key value \".$value\" is not a boolean");
     }
 
     /**
@@ -64,8 +64,8 @@ class ValidationException extends FluentDotEnvException
     public static function valueNotAllowed(string $key, $value, array $allowedValues): self
     {
         return new self(
-            $key.' value "'.$value.'" is not in the allowed list: '
-            .'"'.implode('", "', $allowedValues).'"'
+            "$key value \"$value\" is not in the allowed list: "
+            . "\"" . implode('", "', $allowedValues) . "\""
         );
     }
 
@@ -78,7 +78,7 @@ class ValidationException extends FluentDotEnvException
      */
     public static function globalCallbackCheckFailed(string $key, $value): self
     {
-        return new self($key.' value "'.$value.'" failed a global callback check');
+        return new self("$key value \"$value\" failed a global callback check");
     }
 
     /**
@@ -90,7 +90,7 @@ class ValidationException extends FluentDotEnvException
      */
     public static function callbackCheckFailed(string $key, $value): self
     {
-        return new self($key.' value "'.$value.'" failed a callback check');
+        return new self("$key value \".$value.\" failed a callback check");
     }
 
     /**
@@ -103,6 +103,6 @@ class ValidationException extends FluentDotEnvException
      */
     public static function regexCheckFailed(string $key, $value, string $regex): self
     {
-        return new self($key.' value "'.$value.'" did not match regex "'.$regex.'"');
+        return new self("$key value \"$value\" did not match regex \"$regex\"");
     }
 }

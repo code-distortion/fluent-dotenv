@@ -18,7 +18,7 @@ class AlreadyLoadedException extends FluentDotEnvException
     {
         return new self(
             '.env data has already been loaded. '
-            .'load() and safeload() may be called once with multiple files instead'
+            . 'load() and safeload() may be called once with multiple files instead'
         );
     }
 }

@@ -151,26 +151,26 @@ class FluentDotEnv
      */
     public function __construct()
     {
-        $this->valueStore = new ValueStore;
+        $this->valueStore = new ValueStore();
 
         // pre-import actions
-        $this->pickAction = new PickAction;
-        $this->ignoreAction = new IgnoreAction;
+        $this->pickAction = new PickAction();
+        $this->ignoreAction = new IgnoreAction();
 
         // validation actions
-        $this->requiredAction = new RequiredAction;
-        $this->notEmptyAction = new NotEmptyAction;
-        $this->integerAction = new IntegerAction;
-        $this->booleanAction = new BooleanAction;
-        $this->allowedValuesAction = new AllowedValuesAction;
-        $this->regexAction = new RegexAction;
-        $this->callbackGlobalAction = new CallbackGlobalAction;
-        $this->callbackAction = new CallbackAction;
+        $this->requiredAction = new RequiredAction();
+        $this->notEmptyAction = new NotEmptyAction();
+        $this->integerAction = new IntegerAction();
+        $this->booleanAction = new BooleanAction();
+        $this->allowedValuesAction = new AllowedValuesAction();
+        $this->regexAction = new RegexAction();
+        $this->callbackGlobalAction = new CallbackGlobalAction();
+        $this->callbackAction = new CallbackAction();
 
         // population actions
-//        $this->populateGetenvAction = new populateGetenvAction;
-        $this->populateEnvAction = new PopulateEnvAction;
-        $this->PopulateServerAction = new PopulateServerAction;
+//        $this->populateGetenvAction = new populateGetenvAction();
+        $this->populateEnvAction = new PopulateEnvAction();
+        $this->PopulateServerAction = new PopulateServerAction();
     }
 
     /**
@@ -180,7 +180,7 @@ class FluentDotEnv
      */
     public static function new()
     {
-        return new self;
+        return new self();
     }
 
 
@@ -248,7 +248,6 @@ class FluentDotEnv
      * @throws DependencyException    When a .env loading package cannot be found (eg. vlucas/phpdotenv).
      * @throws InvalidPathException   When the .env file could not be loaded.
      * @throws AlreadyLoadedException When .env values have already been loaded.
-     *
      */
     private function loadFiles(array $paths, bool $safely)
     {
@@ -519,14 +518,14 @@ class FluentDotEnv
      * Take the given keys, get their values, and cast them if necessary.
      *
      * @param string[]    $keys       The keys to get values for.
-     * @param boolean     $needsArray Whether to return as an array or not.
      * @param string|null $castMethod The method to cast the values with.
+     * @param boolean     $needsArray Whether to return as an array or not.
      * @return array|string|integer|boolean|null
      */
     private function retrieveValues(array $keys, $castMethod, bool $needsArray)
     {
         $values = [];
-        foreach($keys as $key) {
+        foreach ($keys as $key) {
             $value = $this->valueStore->get($key);
             $values[$key] = ($castMethod
                 ? $this->$castMethod($value)
