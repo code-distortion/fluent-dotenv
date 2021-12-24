@@ -5,7 +5,7 @@
 ![vlucas/phpdotenv](https://img.shields.io/badge/vlucas%2Fphpdotenv-1+-blue?style=flat-square)
 ![symfony/dotenv](https://img.shields.io/badge/symfony%2Fdotenv-3.3+-blue?style=flat-square)
 [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/code-distortion/fluent-dotenv/run-tests?label=tests&style=flat-square)](https://github.com/code-distortion/fluent-dotenv/actions)
-[![Buy us a tree](https://img.shields.io/badge/treeware-%F0%9F%8C%B3-lightgreen?style=flat-square)](https://ecologi.com/treeware?gift-trees)
+[![Buy The World a Tree](https://img.shields.io/badge/treeware-%F0%9F%8C%B3-lightgreen?style=flat-square)](https://plant.treeware.earth/code-distortion/fluent-dotenv)
 [![Contributor Covenant](https://img.shields.io/badge/contributor%20covenant-v2.0%20adopted-ff69b4.svg?style=flat-square)](CODE_OF_CONDUCT.md)
 
 ***code-distortion/fluent-dotenv*** is a wrapper with a fluent interface for new and old versions of [vlucas/phpdotenv](https://github.com/vlucas/phpdotenv), allowing you to easily read values from .env files.
@@ -103,9 +103,9 @@ If you only want to load specific keys you can specify them, others from your .e
 
 ``` php
 $fDotEnv = FluentDotEnv::new()
-    ->pick('MY_VAL1')              // add a key to pick
-    ->pick('MY_VAL2')              // values can be passed individually
-    ->pick(['MY_VAL3', 'MY_VAL4']) // or multiple as an array
+    ->pick('MY_KEY1')              // add a key to pick
+    ->pick('MY_KEY2')              // values can be passed individually
+    ->pick(['MY_KEY3', 'MY_KEY4']) // or multiple as an array
     ->load('path/to/.env');
 ```
 
@@ -113,9 +113,9 @@ Conversely, particular keys can be ignored:
 
 ``` php
 $fDotEnv = FluentDotEnv::new()
-    ->ignore('MY_VAL1')              // add a key to ignore
-    ->ignore('MY_VAL2')              // values can be passed individually
-    ->ignore(['MY_VAL3', 'MY_VAL4']) // or multiple as an array
+    ->ignore('MY_KEY1')              // add a key to ignore
+    ->ignore('MY_KEY2')              // values can be passed individually
+    ->ignore(['MY_KEY3', 'MY_KEY4']) // or multiple as an array
     ->load('path/to/.env');
 ```
 
@@ -129,50 +129,50 @@ Validation can be applied to the values in an .env file. A `CodeDistortion\Fluen
 $fDotEnv = FluentDotEnv::new()
 
     // make sure these keys exist
-    ->required('MY_VAL')
-    ->required(['MY_VAL1', 'MY_VAL2'])
+    ->required('MY_KEY')
+    ->required(['MY_KEY1', 'MY_KEY2'])
 
     // when these keys exist, make sure they aren't empty
-    ->notEmpty('MY_VAL')
-    ->notEmpty(['MY_VAL1', 'MY_VAL2'])
+    ->notEmpty('MY_KEY')
+    ->notEmpty(['MY_KEY1', 'MY_KEY2'])
 
     // when these keys exist, make sure they are integer strings
-    ->integer('MY_VAL')
-    ->integer(['MY_VAL1', 'MY_VAL2'])
+    ->integer('MY_KEY')
+    ->integer(['MY_KEY1', 'MY_KEY2'])
 
     // when these keys exist, make sure they are boolean strings
     // ie. "true", "false", "On", "Off", "Yes", "No", "1" and "0"
-    ->boolean('MY_VAL')
-    ->boolean(['MY_VAL1', 'MY_VAL2'])
+    ->boolean('MY_KEY')
+    ->boolean(['MY_KEY1', 'MY_KEY2'])
 
     // when a key exists, make sure its value is in a predefined list
-    ->allowedValues('MY_VAL', ['value-1', 'value-2'])
+    ->allowedValues('MY_KEY', ['value-1', 'value-2'])
     // allow predefined values for a multiple keys
-    ->allowedValues(['MY_VAL1', 'MY_VAL2'], ['value-1', 'value-2'])
+    ->allowedValues(['MY_KEY1', 'MY_KEY2'], ['value-1', 'value-2'])
     // different predefined values can be specified for different keys in one go
     ->allowedValues([
-        'MY_VAL1' => ['value-1', 'value-2'],
-        'MY_VAL2' => ['value-a', 'value-b'],
+        'MY_KEY1' => ['value-1', 'value-2'],
+        'MY_KEY2' => ['value-a', 'value-b'],
     ])
 
     // when a key exists, make sure its value matches a regular expression
-    ->regex('MY_VAL', '/^[0-9]+\.[0-9]{2}$/') 
+    ->regex('MY_KEY', '/^[0-9]+\.[0-9]{2}$/')
     // the same regex can be applied to multiple keys
-    ->regex(['MY_VAL1', 'MY_VAL2'], '/^[0-9]+\.[0-9]{2}$/')
+    ->regex(['MY_KEY1', 'MY_KEY2'], '/^[0-9]+\.[0-9]{2}$/')
     // different regexes can be applied to different keys in one go
     ->regex([
-        'MY_VAL1' => '/^[0-9]+\.[0-9]{2}$/',
-        'MY_VAL2' => '/^[a-z]+$/'
+        'MY_KEY1' => '/^[0-9]+\.[0-9]{2}$/',
+        'MY_KEY2' => '/^[a-z]+$/'
     ])
 
     // when a key exists, validate it's value via a callback
-    ->callback('MY_VAL', $callback)
+    ->callback('MY_KEY', $callback)
     // the same callback can be applied to multiple keys
-    ->callback(['MY_VAL1', 'MY_VAL2'], $callback)
+    ->callback(['MY_KEY1', 'MY_KEY2'], $callback)
     // different callbacks can be applied to different keys in one go
     ->callback([
-        'MY_VAL1' => $callback1,
-        'MY_VAL2' => $callback2,
+        'MY_KEY1' => $callback1,
+        'MY_KEY2' => $callback2,
     ])
     // validate *all* values via a callback
     ->callback(function (string $key, $value) {
@@ -196,12 +196,12 @@ $fDotEnv = FluentDotEnv::new()->load('path/to/.env');
 
 // cast to a boolean when the value is one of:
 // "true", "false", "On", "Off", "Yes", "No", "1" and "0"
-$boolean = $fDotEnv->castBoolean('MY_VAL');
-$booleans = $fDotEnv->castBoolean(['MY_VAL1', 'MY_VAL2']);
+$boolean = $fDotEnv->castBoolean('MY_KEY');
+$booleans = $fDotEnv->castBoolean(['MY_KEY1', 'MY_KEY2']);
 
 // cast to an integer, including negative numbers
-$integer = $fDotEnv->castInteger('MY_VAL');
-$integers = $fDotEnv->castInteger(['MY_VAL1', 'MY_VAL2']);
+$integer = $fDotEnv->castInteger('MY_KEY');
+$integers = $fDotEnv->castInteger(['MY_KEY1', 'MY_KEY2']);
 ```
 
 
@@ -237,21 +237,21 @@ $fDotEnv = FluentDotEnv::new()
 
 ### Calling order
 
-The methods above can be called *before* or *after* loading values from .env files.
+The methods above can be called *before* or *after* loading values from .env files. eg.
 
 ``` php
 $fDotEnv = FluentDotEnv::new()
     ->load('path/to/.env') // loaded at the beginning
-    ->pick(['MY_VAL1', 'MY_VAL2'])
-    ->integer('MY_VAL1')
-    ->boolean('MY_VAL2')
+    ->pick(['MY_KEY1', 'MY_KEY2'])
+    ->integer('MY_KEY1')
+    ->boolean('MY_KEY2')
     ->populateEnv();
 
 $fDotEnv = FluentDotEnv::new()
-    ->pick(['MY_VAL1', 'MY_VAL2'])
-    ->integer('MY_VAL1')
-    ->boolean('MY_VAL2')
-    ->populateEnv()
+    ->pick(['MY_KEY1', 'MY_KEY2']) // deferred
+    ->integer('MY_KEY1') // deferred
+    ->boolean('MY_KEY2') // deferred
+    ->populateEnv() // deferred
     ->load('path/to/.env'); // loaded at the end
 ```
 
@@ -301,13 +301,7 @@ This library uses [SemVer 2.0.0](https://semver.org/) versioning. This means tha
 
 ## Treeware
 
-You're free to use this package, but if it makes it to your production environment please plant or buy a tree for the world.
-
-It's now common knowledge that one of the best tools to tackle the climate crisis and keep our temperatures from rising above 1.5C is to <a href="https://www.bbc.co.uk/news/science-environment-48870920">plant trees</a>. If you support this package and contribute to the Treeware forest you'll be creating employment for local families and restoring wildlife habitats.
-
-You can buy trees here [https://ecologi.com/treeware](https://ecologi.com/treeware?gift-trees)
-
-Read more about Treeware at [treeware.earth](http://treeware.earth)
+This package is [Treeware](https://treeware.earth). If you use it in production, then we ask that you [**buy the world a tree**](https://plant.treeware.earth/code-distortion/fluent-dotenv) to thank us for our work. By contributing to the Treeware forest you’ll be creating employment for local families and restoring wildlife habitats.
 
 
 
