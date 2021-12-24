@@ -6,12 +6,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 
 
+## [0.1.2] - 2021-12-25
+
+### Added
+- Added support for PHP 8.1
+- Added phpstan ^1.0 to dev dependencies
+- Tweaks to documentation
+
+
+
 ## [0.1.1] - 2021-01-06
 
 ### Added
-- Support for PHP 8.0
+- Added support for PHP 8.0
 - PSR12 formatting
 - Tweaks to documentation
+
 
 
 ## [0.1.0] - 2020-07-16
