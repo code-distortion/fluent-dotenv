@@ -483,7 +483,7 @@ class FluentDotEnv
     /**
      * Return the value, cast to a boolean.
      *
-     * (Will return null if it isn't an "boolean string").
+     * (Will return null if it isn't a "boolean string").
      *
      * @param string|string[] $key The key to get the value for.
      * @return boolean|boolean[]|null
@@ -538,7 +538,7 @@ class FluentDotEnv
     /**
      * Return the value, cast as a boolean.
      *
-     * (Will return null if it isn't an "boolean string").
+     * (Will return null if it isn't a "boolean string").
      *
      * @param string $value The value to cast.
      * @return boolean|null

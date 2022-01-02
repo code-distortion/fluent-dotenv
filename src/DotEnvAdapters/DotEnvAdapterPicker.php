@@ -90,7 +90,9 @@ class DotEnvAdapterPicker
             // to try and detect a change after this so the extra work can be removed, this code looks for the 'void'
             // return type in the Dotenv::load(..) method which was added in version 4.0.0
             $reflectionMethod = new ReflectionMethod(SymfonyDotenv::class, 'load');
-            if ((string) $reflectionMethod->getReturnType() == 'void') {
+            $returnType = $reflectionMethod->getReturnType();
+            $returnTypeName = !is_null($returnType) ? $returnType->getName() : null;
+            if ($returnTypeName == 'void') {
                 return new SymfonyAdapter4Plus();
             }
             return new SymfonyAdapter3();
