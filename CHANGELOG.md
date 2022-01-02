@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 
 
+## [0.1.4] - 2022-01-03
+
+### Added
+- Added support for symfony/dotenv:^6.0
+- Updated GitHub Actions workflow to improve platform coverage
+
+
+
 ## [0.1.3] - 2022-01-01
 
 ### Fixed
