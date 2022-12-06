@@ -300,6 +300,7 @@ class FluentDotEnv
         ];
 
         foreach (array_merge($filterActions, $validationActions, $populateActions) as $action) {
+            /** @var FilterActionInterface|ValidationActionInterface|PopulateActionInterface $action */
             $action->apply($this->valueStore);
         }
     }
