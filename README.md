@@ -1,10 +1,10 @@
 # Fluent dotenv
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/code-distortion/fluent-dotenv.svg?style=flat-square)](https://packagist.org/packages/code-distortion/fluent-dotenv)
-![PHP Version](https://img.shields.io/badge/PHP-7.0%20to%208.1-blue?style=flat-square)
+![PHP Version](https://img.shields.io/badge/PHP-7.0%20to%208.2-blue?style=flat-square)
 ![vlucas/phpdotenv](https://img.shields.io/badge/vlucas%2Fphpdotenv-1+-blue?style=flat-square)
 ![symfony/dotenv](https://img.shields.io/badge/symfony%2Fdotenv-3.3+-blue?style=flat-square)
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/code-distortion/fluent-dotenv/run-tests?label=tests&style=flat-square)](https://github.com/code-distortion/fluent-dotenv/actions)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/code-distortion/fluent-dotenv/run-tests.yml?branch=master&style=flat-square)](https://github.com/code-distortion/fluent-dotenv/actions)
 [![Buy The World a Tree](https://img.shields.io/badge/treeware-%F0%9F%8C%B3-lightgreen?style=flat-square)](https://plant.treeware.earth/code-distortion/fluent-dotenv)
 [![Contributor Covenant](https://img.shields.io/badge/contributor%20covenant-v2.0%20adopted-ff69b4.svg?style=flat-square)](CODE_OF_CONDUCT.md)
 
