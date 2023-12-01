@@ -2,612 +2,612 @@ name: run-tests
 
 on:
   push:
+#    branches: [ "master" ]
+  pull_request:
+#    branches: [ "master" ]
   schedule:
     - cron: "0 0 * * 0"
 
+permissions:
+  contents: read
+
 jobs:
-  vlucas-phpdotenv-php82:
 
-    name: PHP ${{ matrix.php }} - vlucas/phpdotenv ${{ matrix.vlucas-phpdotenv }} - ${{ matrix.os }} - ${{ matrix.dependency-prefer }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: true
-      matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-        php: [8.2]
-        phpunit: [^9.3]
-        vlucas-phpdotenv: [^5.0, ^4.1.5, ^3.6.4, ^2.0, ^1.0]
-        dependency-prefer: [prefer-stable, prefer-lowest]
-        exclude:
-          - os: macos-latest
-            vlucas-phpdotenv: ^5.0
-            dependency-prefer: prefer-lowest # generates error "Fatal error: During inheritance of IteratorAggregate: Uncaught Return type of PhpOption\Some::getIterator() should either be compatible with IteratorAggregate::getIterator(): Traversable, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice"
-          - os: macos-latest
-            vlucas-phpdotenv: ^4.1.5
-            dependency-prefer: prefer-lowest # generates error "Fatal error: During inheritance of ArrayAccess: Uncaught Return type of Dotenv\Repository\AbstractRepository::offsetExists($offset) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice"
-          - os: macos-latest
-            vlucas-phpdotenv: ^3.6.4
-            dependency-prefer: prefer-lowest # generates error "Fatal error: During inheritance of ArrayAccess: Uncaught Return type of Dotenv\Environment\AbstractVariables::offsetExists($offset) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice"
-          - os: macos-latest
-            vlucas-phpdotenv: ^2.0
-            dependency-prefer: prefer-lowest # generates error "auto_detect_line_endings is deprecated"
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php }}
-          extensions: fileinfo, mbstring
-          coverage: none
-
-#      # find out composer's cache directory on the current os - for the "Cache dependencies (composer)" step below
-#      - name: Determine composer's cache directory
-#        id: composer-cache
-#        run: |
-#            echo "::set-output name=dir::$(composer config cache-files-dir)"
+#  vlucas-phpdotenv-php83-82-81-80:
 #
-#      - name: Cache dependencies (composer)
-#        uses: actions/cache@v2
-#        with:
-#          path: ${{ steps.composer-cache.outputs.dir }}
-#          key: php-${{ matrix.php }}-vlucas-phpdotenv-${{ matrix.vlucas-phpdotenv }}-os-${{ matrix.os }}-dependency-prefer-${{ matrix.dependency-prefer }}-composer-${{ hashFiles('composer.json') }}
-
-      - name: Install dependencies (composer)
-        run: |
-          composer require "vlucas/phpdotenv:${{ matrix.vlucas-phpdotenv }}" --no-interaction --no-update
-          composer require "phpunit/phpunit:${{ matrix.phpunit }}" --dev --no-interaction --no-update
-          composer update --${{ matrix.dependency-prefer }} --prefer-dist --no-interaction
-
-      - name: Execute tests
-        run: vendor/bin/phpunit
-
-  vlucas-phpdotenv-php81:
-
-    name: PHP ${{ matrix.php }} - vlucas/phpdotenv ${{ matrix.vlucas-phpdotenv }} - ${{ matrix.os }} - ${{ matrix.dependency-prefer }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: true
-      matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-        php: [8.1]
-        phpunit: [^9.3]
-        vlucas-phpdotenv: [^5.0, ^4.1.5, ^3.6.4, ^2.0, ^1.0]
-        dependency-prefer: [prefer-stable, prefer-lowest]
-        exclude:
-          - os: macos-latest
-            vlucas-phpdotenv: ^5.0
-            dependency-prefer: prefer-lowest # generates error "Fatal error: During inheritance of IteratorAggregate: Uncaught Return type of PhpOption\Some::getIterator() should either be compatible with IteratorAggregate::getIterator(): Traversable, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice"
-          - os: macos-latest
-            vlucas-phpdotenv: ^4.1.5
-            dependency-prefer: prefer-lowest # generates error "Fatal error: During inheritance of ArrayAccess: Uncaught Return type of Dotenv\Repository\AbstractRepository::offsetExists($offset) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice"
-          - os: macos-latest
-            vlucas-phpdotenv: ^3.6.4
-            dependency-prefer: prefer-lowest # generates error "Fatal error: During inheritance of ArrayAccess: Uncaught Return type of Dotenv\Environment\AbstractVariables::offsetExists($offset) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice"
-          - os: macos-latest
-            vlucas-phpdotenv: ^2.0
-            dependency-prefer: prefer-lowest # generates error "auto_detect_line_endings is deprecated"
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php }}
-          extensions: fileinfo, mbstring
-          coverage: none
-
-#      # find out composer's cache directory on the current os - for the "Cache dependencies (composer)" step below
-#      - name: Determine composer's cache directory
-#        id: composer-cache
-#        run: |
-#            echo "::set-output name=dir::$(composer config cache-files-dir)"
+#    name: "PHP${{ matrix.php }} vlucas/phpdotenv ${{ matrix.vlucas-phpdotenv }} ${{ matrix.os-title }} ${{ matrix.dependency-prefer-title }}"
+#    runs-on: "${{ matrix.os }}"
+#    strategy:
+#      fail-fast: false
+#      matrix:
+#        os: [ "ubuntu-latest", "macos-latest", "windows-latest" ]
+#        php: [ "8.3", "8.2", "8.1", "8.0" ]
+#        vlucas-phpdotenv: [ "^5.0", "^4.1.5", "^3.6.4", "^2.0", "^1.0" ]
+#        dependency-prefer: [ "prefer-stable", "prefer-lowest" ]
+#        include:
+#          - php: "8.3"
+#            phpunit: "^10.1.0"
+#            phpunit-config-file: "phpunit.github-actions.xml.dist"
+#          - php: "8.2"
+#            phpunit: "^10.1.0"
+#            phpunit-config-file: "phpunit.github-actions.xml.dist"
+#          - php: "8.2"
+#            phpunit: "^10.1.0"
+#            phpunit-config-file: "phpunit.github-actions.xml.dist"
+#          - php: "8.1"
+#            phpunit: "^10.1.0"
+#            phpunit-config-file: "phpunit.github-actions.xml.dist"
+#          - php: "8.0"
+#            phpunit: "^9.3"
+#            phpunit-config-file: "phpunit.github-actions.up-to-9.xml.dist"
+#          - os: "ubuntu-latest"
+#            os-title: "ubuntu"
+#          - os: "macos-latest"
+#            os-title: "macos"
+#          - os: "windows-latest"
+#            os-title: "win"
+#          - dependency-prefer: "prefer-stable"
+#            dependency-prefer-title: "stable"
+#          - dependency-prefer: "prefer-lowest"
+#            dependency-prefer-title: "lowest"
 #
-#      - name: Cache dependencies (composer)
-#        uses: actions/cache@v2
-#        with:
-#          path: ${{ steps.composer-cache.outputs.dir }}
-#          key: php-${{ matrix.php }}-vlucas-phpdotenv-${{ matrix.vlucas-phpdotenv }}-os-${{ matrix.os }}-dependency-prefer-${{ matrix.dependency-prefer }}-composer-${{ hashFiles('composer.json') }}
-
-      - name: Install dependencies (composer)
-        run: |
-          composer require "vlucas/phpdotenv:${{ matrix.vlucas-phpdotenv }}" --no-interaction --no-update
-          composer require "phpunit/phpunit:${{ matrix.phpunit }}" --dev --no-interaction --no-update
-          composer update --${{ matrix.dependency-prefer }} --prefer-dist --no-interaction
-
-      - name: Execute tests
-        run: vendor/bin/phpunit
-
-  vlucas-phpdotenv-php80:
-
-    name: PHP ${{ matrix.php }} - vlucas/phpdotenv ${{ matrix.vlucas-phpdotenv }} - ${{ matrix.os }} - ${{ matrix.dependency-prefer }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: true
-      matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-        php: ["8.0"]
-        phpunit: [^9.3]
-        vlucas-phpdotenv: [^5.0, ^4.1.5, ^3.6.4, ^2.0, ^1.0]
-        dependency-prefer: [prefer-stable, prefer-lowest]
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php }}
-          extensions: fileinfo, mbstring
-          coverage: none
-
-#      # find out composer's cache directory on the current os - for the "Cache dependencies (composer)" step below
-#      - name: Determine composer's cache directory
-#        id: composer-cache
-#        run: |
-#            echo "::set-output name=dir::$(composer config cache-files-dir)"
+#    steps:
 #
-#      - name: Cache dependencies (composer)
-#        uses: actions/cache@v2
-#        with:
-#          path: ${{ steps.composer-cache.outputs.dir }}
-#          key: php-${{ matrix.php }}-vlucas-phpdotenv-${{ matrix.vlucas-phpdotenv }}-os-${{ matrix.os }}-dependency-prefer-${{ matrix.dependency-prefer }}-composer-${{ hashFiles('composer.json') }}
-
-      - name: Install dependencies (composer)
-        run: |
-          composer require "vlucas/phpdotenv:${{ matrix.vlucas-phpdotenv }}" --no-interaction --no-update
-          composer require "phpunit/phpunit:${{ matrix.phpunit }}" --dev --no-interaction --no-update
-          composer update --${{ matrix.dependency-prefer }} --prefer-dist --no-interaction
-
-      - name: Execute tests
-        run: vendor/bin/phpunit
-
-  vlucas-phpdotenv-php74:
-
-    name: PHP ${{ matrix.php }} - vlucas/phpdotenv ${{ matrix.vlucas-phpdotenv }} - ${{ matrix.os }} - ${{ matrix.dependency-prefer }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: true
-      matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-        php: [7.4]
-        phpunit: [^9.0]
-        vlucas-phpdotenv: [^5.0, ^4.0, ^3.0, ^2.0, ^1.0]
-        dependency-prefer: [prefer-stable, prefer-lowest]
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php }}
-          extensions: fileinfo, mbstring
-          coverage: none
-
-#      # find out composer's cache directory on the current os - for the "Cache dependencies (composer)" step below
-#      - name: Determine composer's cache directory
-#        id: composer-cache
-#        run: |
-#            echo "::set-output name=dir::$(composer config cache-files-dir)"
+#      - name: "Checkout code"
+#        uses: "actions/checkout@v4"
 #
-#      - name: Cache dependencies (composer)
-#        uses: actions/cache@v2
-#        with:
-#          path: ${{ steps.composer-cache.outputs.dir }}
-#          key: php-${{ matrix.php }}-vlucas-phpdotenv-${{ matrix.vlucas-phpdotenv }}-os-${{ matrix.os }}-dependency-prefer-${{ matrix.dependency-prefer }}-composer-${{ hashFiles('composer.json') }}
-
-      - name: Install dependencies (composer)
-        run: |
-          composer require "vlucas/phpdotenv:${{ matrix.vlucas-phpdotenv }}" --no-interaction --no-update
-          composer require "phpunit/phpunit:${{ matrix.phpunit }}" --dev --no-interaction --no-update
-          composer update --${{ matrix.dependency-prefer }} --prefer-dist --no-interaction
-
-      - name: Execute tests
-        run: vendor/bin/phpunit
-
-  vlucas-phpdotenv-php73:
-
-    name: PHP ${{ matrix.php }} - vlucas/phpdotenv ${{ matrix.vlucas-phpdotenv }} - ${{ matrix.os }} - ${{ matrix.dependency-prefer }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: true
-      matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-        php: [7.3]
-        phpunit: [^9.0]
-        vlucas-phpdotenv: [^5.0, ^4.0, ^3.0, ^2.0, ^1.0]
-        dependency-prefer: [prefer-stable, prefer-lowest]
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php }}
-          extensions: fileinfo, mbstring
-          coverage: none
-
-#      # find out composer's cache directory on the current os - for the "Cache dependencies (composer)" step below
-#      - name: Determine composer's cache directory
-#        id: composer-cache
-#        run: |
-#            echo "::set-output name=dir::$(composer config cache-files-dir)"
+#      - name: "Validate composer.json and composer.lock"
+#        run: "composer validate --strict"
 #
-#      - name: Cache dependencies (composer)
-#        uses: actions/cache@v2
+#      - name: "Setup PHP"
+#        uses: "shivammathur/setup-php@v2"
 #        with:
-#          path: ${{ steps.composer-cache.outputs.dir }}
-#          key: php-${{ matrix.php }}-vlucas-phpdotenv-${{ matrix.vlucas-phpdotenv }}-os-${{ matrix.os }}-dependency-prefer-${{ matrix.dependency-prefer }}-composer-${{ hashFiles('composer.json') }}
-
-      - name: Install dependencies (composer)
-        run: |
-          composer require "vlucas/phpdotenv:${{ matrix.vlucas-phpdotenv }}" --no-interaction --no-update
-          composer require "phpunit/phpunit:${{ matrix.phpunit }}" --dev --no-interaction --no-update
-          composer update --${{ matrix.dependency-prefer }} --prefer-dist --no-interaction
-
-      - name: Execute tests
-        run: vendor/bin/phpunit
-
-  vlucas-phpdotenv-php72:
-
-    name: PHP ${{ matrix.php }} - vlucas/phpdotenv ${{ matrix.vlucas-phpdotenv }} - ${{ matrix.os }} - ${{ matrix.dependency-prefer }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: true
-      matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-        php: [7.2]
-        phpunit: [^8.0]
-        vlucas-phpdotenv: [^5.0, ^4.0, ^3.0, ^2.0, ^1.0]
-        dependency-prefer: [prefer-stable, prefer-lowest]
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php }}
-          extensions: fileinfo, mbstring
-          coverage: none
-
-#      # find out composer's cache directory on the current os - for the "Cache dependencies (composer)" step below
-#      - name: Determine composer's cache directory
-#        id: composer-cache
-#        run: |
-#            echo "::set-output name=dir::$(composer config cache-files-dir)"
+#          php-version: "${{ matrix.php }}"
+#          extensions: fileinfo, mbstring
+#          ini-values: error_reporting=E_ALL
+#          coverage: none
+#        env:
+#          COMPOSER_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
 #
-#      - name: Cache dependencies (composer)
-#        uses: actions/cache@v2
-#        with:
-#          path: ${{ steps.composer-cache.outputs.dir }}
-#          key: php-${{ matrix.php }}-vlucas-phpdotenv-${{ matrix.vlucas-phpdotenv }}-os-${{ matrix.os }}-dependency-prefer-${{ matrix.dependency-prefer }}-composer-${{ hashFiles('composer.json') }}
-
-      - name: Install dependencies (composer)
-        run: |
-          composer require "vlucas/phpdotenv:${{ matrix.vlucas-phpdotenv }}" --no-interaction --no-update
-          composer require "phpunit/phpunit:${{ matrix.phpunit }}" --dev --no-interaction --no-update
-          composer update --${{ matrix.dependency-prefer }} --prefer-dist --no-interaction
-
-      - name: Execute tests
-        run: vendor/bin/phpunit
-
-  vlucas-phpdotenv-php71:
-
-    name: PHP ${{ matrix.php }} - vlucas/phpdotenv ${{ matrix.vlucas-phpdotenv }} - ${{ matrix.os }} - ${{ matrix.dependency-prefer }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: true
-      matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-        php: [7.1]
-        phpunit: [^7.0]
-        vlucas-phpdotenv: [^5.0, ^4.0, ^3.0, ^2.0, ^1.0]
-        dependency-prefer: [prefer-stable, prefer-lowest]
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php }}
-          extensions: fileinfo, mbstring
-          coverage: none
-
-#      # find out composer's cache directory on the current os - for the "Cache dependencies (composer)" step below
-#      - name: Determine composer's cache directory
-#        id: composer-cache
+#      # find composer's cache directory - so we know which directory to cache in the next step
+#      - name: "Find composer's cache directory"
+#        id: "composer-cache"
+#        shell: bash # make sure this step works on Windows - see https://github.com/actions/runner/issues/2224#issuecomment-1289533957
 #        run: |
-#            echo "::set-output name=dir::$(composer config cache-files-dir)"
+#          echo "composer_cache_dir=$(composer config cache-files-dir)">> "$GITHUB_OUTPUT"
 #
-#      - name: Cache dependencies (composer)
-#        uses: actions/cache@v2
+#      - name: "Cache composer's cache directory"
+#        uses: "actions/cache@v3"
 #        with:
-#          path: ${{ steps.composer-cache.outputs.dir }}
-#          key: php-${{ matrix.php }}-vlucas-phpdotenv-${{ matrix.vlucas-phpdotenv }}-os-${{ matrix.os }}-dependency-prefer-${{ matrix.dependency-prefer }}-composer-${{ hashFiles('composer.json') }}
-
-      - name: Install dependencies (composer)
-        run: |
-          composer require "vlucas/phpdotenv:${{ matrix.vlucas-phpdotenv }}" --no-interaction --no-update
-          composer require "phpunit/phpunit:${{ matrix.phpunit }}" --dev --no-interaction --no-update
-          composer update --${{ matrix.dependency-prefer }} --prefer-dist --no-interaction
-
-      - name: Execute tests
-        run: vendor/bin/phpunit
-
-  vlucas-phpdotenv-php70:
-
-    name: PHP ${{ matrix.php }} - vlucas/phpdotenv ${{ matrix.vlucas-phpdotenv }} - ${{ matrix.os }} - ${{ matrix.dependency-prefer }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: true
-      matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-        php: ["7.0"]
-        phpunit: [^6.0]
-        vlucas-phpdotenv: [^4.0, ^3.0, ^2.0, ^1.0]
-        dependency-prefer: [prefer-stable, prefer-lowest]
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php }}
-          extensions: fileinfo, mbstring
-          coverage: none
-
-#      # find out composer's cache directory on the current os - for the "Cache dependencies (composer)" step below
-#      - name: Determine composer's cache directory
-#        id: composer-cache
+#          path: "${{ steps.composer-cache.outputs.composer_cache_dir }}"
+#          key: "[${{ matrix.os }}][php-${{ matrix.php }}][vlucas/phpdotenv-${{ matrix.vlucas-phpdotenv }}][${{ matrix.dependency-prefer }}][composer.json-${{ hashFiles('composer.json') }}]"
+#
+#      - name: "Install dependencies"
+#        uses: "nick-fields/retry@v2"
+#        with:
+#          timeout_minutes: 5
+#          max_attempts: 5
+#          command: |
+#            composer remove "infection/infection" --dev --no-interaction --no-update
+#            composer remove "phpstan/phpstan" --dev --no-interaction --no-update
+#            composer remove "squizlabs/php_codesniffer" --dev --no-interaction --no-update
+#            composer require "phpunit/phpunit:${{ matrix.phpunit }}" --dev --no-interaction --no-update
+#            composer require "vlucas/phpdotenv:${{ matrix.vlucas-phpdotenv }}" --dev --no-interaction --no-update
+#            composer update --${{ matrix.dependency-prefer }} --prefer-dist --no-interaction --optimize-autoloader --no-progress
+#
+#      - name: "Execute tests"
+#        run: vendor/bin/phpunit "--configuration=${{ matrix.phpunit-config-file }}" --no-coverage --stop-on-error --stop-on-failure
+#
+#
+#
+#  vlucas-phpdotenv-php74-73-72-71-70:
+#
+#    name: "PHP${{ matrix.php }} vlucas/phpdotenv ${{ matrix.vlucas-phpdotenv }} ${{ matrix.os-title }} ${{ matrix.dependency-prefer-title }}"
+#    runs-on: "${{ matrix.os }}"
+#    strategy:
+#      fail-fast: false
+#      matrix:
+#        os: [ "ubuntu-latest", "macos-latest", "windows-latest" ]
+#        php: [ "7.4", "7.3", "7.2", "7.1", "7.0" ]
+#        vlucas-phpdotenv: [ "^5.0", "^4.1.5", "^3.6.4", "^2.0", "^1.0" ]
+#        dependency-prefer: [ "prefer-stable", "prefer-lowest" ]
+#        include:
+#          - php: "7.4"
+#            phpunit: "^9.3"
+#            phpunit-config-file: "phpunit.github-actions.up-to-9.xml.dist"
+#          - php: "7.3"
+#            phpunit: "^9.3"
+#            phpunit-config-file: "phpunit.github-actions.up-to-9.xml.dist"
+#          - php: "7.2"
+#            phpunit: "^8.0"
+#            phpunit-config-file: "phpunit.github-actions.up-to-9.xml.dist"
+#          - php: "7.1"
+#            phpunit: "^7.0"
+#            phpunit-config-file: "phpunit.github-actions.up-to-9.xml.dist"
+#          - php: "7.0"
+#            phpunit: "^6.0"
+#            phpunit-config-file: "phpunit.github-actions.up-to-9.xml.dist"
+#          - os: "ubuntu-latest"
+#            os-title: "ubuntu"
+#          - os: "macos-latest"
+#            os-title: "macos"
+#          - os: "windows-latest"
+#            os-title: "win"
+#          - dependency-prefer: "prefer-stable"
+#            dependency-prefer-title: "stable"
+#          - dependency-prefer: "prefer-lowest"
+#            dependency-prefer-title: "lowest"
+#        exclude:
+#          - php: "7.0"
+#            vlucas-phpdotenv: "^5.0"
+#
+#    steps:
+#
+#      - name: "Checkout code"
+#        uses: "actions/checkout@v4"
+#
+#      - name: "Validate composer.json and composer.lock"
+#        run: "composer validate --strict"
+#
+#      - name: "Setup PHP"
+#        uses: "shivammathur/setup-php@v2"
+#        with:
+#          php-version: "${{ matrix.php }}"
+#          extensions: fileinfo, mbstring
+#          ini-values: error_reporting=E_ALL
+#          coverage: none
+#        env:
+#          COMPOSER_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+#
+#      # find composer's cache directory - so we know which directory to cache in the next step
+#      - name: "Find composer's cache directory"
+#        id: "composer-cache"
+#        shell: bash # make sure this step works on Windows - see https://github.com/actions/runner/issues/2224#issuecomment-1289533957
 #        run: |
-#            echo "::set-output name=dir::$(composer config cache-files-dir)"
+#          echo "composer_cache_dir=$(composer config cache-files-dir)">> "$GITHUB_OUTPUT"
 #
-#      - name: Cache dependencies (composer)
-#        uses: actions/cache@v2
+#      - name: "Cache composer's cache directory"
+#        uses: "actions/cache@v3"
 #        with:
-#          path: ${{ steps.composer-cache.outputs.dir }}
-#          key: php-${{ matrix.php }}-vlucas-phpdotenv-${{ matrix.vlucas-phpdotenv }}-os-${{ matrix.os }}-dependency-prefer-${{ matrix.dependency-prefer }}-composer-${{ hashFiles('composer.json') }}
+#          path: "${{ steps.composer-cache.outputs.composer_cache_dir }}"
+#          key: "[${{ matrix.os }}][php-${{ matrix.php }}][vlucas/phpdotenv-${{ matrix.vlucas-phpdotenv }}][${{ matrix.dependency-prefer }}][composer.json-${{ hashFiles('composer.json') }}]"
+#
+#      - name: "Install dependencies"
+#        uses: "nick-fields/retry@v2"
+#        with:
+#          timeout_minutes: 5
+#          max_attempts: 5
+#          command: |
+#            composer remove "infection/infection" --dev --no-interaction --no-update
+#            composer remove "phpstan/phpstan" --dev --no-interaction --no-update
+#            composer remove "squizlabs/php_codesniffer" --dev --no-interaction --no-update
+#            composer require "phpunit/phpunit:${{ matrix.phpunit }}" --dev --no-interaction --no-update
+#            composer require "vlucas/phpdotenv:${{ matrix.vlucas-phpdotenv }}" --dev --no-interaction --no-update
+#            composer update --${{ matrix.dependency-prefer }} --prefer-dist --no-interaction --optimize-autoloader --no-progress
+#
+#      - name: "Execute tests"
+#        run: vendor/bin/phpunit "--configuration=${{ matrix.phpunit-config-file }}" --no-coverage --stop-on-error --stop-on-failure
+#
+#
+#
+#  symfony-dotenv-php83-82-81-80:
+#
+#    name: "PHP${{ matrix.php }} symfony/dotenv ${{ matrix.symfony-dotenv }} ${{ matrix.os-title }} ${{ matrix.dependency-prefer-title }}"
+#    runs-on: "${{ matrix.os }}"
+#    strategy:
+#      fail-fast: false
+#      matrix:
+#        os: [ "ubuntu-latest", "macos-latest", "windows-latest" ]
+#        php: [ "8.3", "8.2", "8.1", "8.0" ]
+#        symfony-dotenv: [ "^6.0", "^5.0", "^4.0", "^3.3" ]
+#        dependency-prefer: [ "prefer-stable", "prefer-lowest" ]
+#        include:
+#          - php: "8.3"
+#            phpunit: "^10.1.0"
+#            phpunit-config-file: "phpunit.github-actions.xml.dist"
+#          - php: "8.2"
+#            phpunit: "^10.1.0"
+#            phpunit-config-file: "phpunit.github-actions.xml.dist"
+#          - php: "8.2"
+#            phpunit: "^10.1.0"
+#            phpunit-config-file: "phpunit.github-actions.xml.dist"
+#          - php: "8.1"
+#            phpunit: "^10.1.0"
+#            phpunit-config-file: "phpunit.github-actions.xml.dist"
+#          - php: "8.0"
+#            phpunit: "^9.3"
+#            phpunit-config-file: "phpunit.github-actions.up-to-9.xml.dist"
+#          - os: "ubuntu-latest"
+#            os-title: "ubuntu"
+#          - os: "macos-latest"
+#            os-title: "macos"
+#          - os: "windows-latest"
+#            os-title: "win"
+#          - dependency-prefer: "prefer-stable"
+#            dependency-prefer-title: "stable"
+#          - dependency-prefer: "prefer-lowest"
+#            dependency-prefer-title: "lowest"
+#
+#    steps:
+#
+#      - name: "Checkout code"
+#        uses: "actions/checkout@v4"
+#
+#      - name: "Validate composer.json and composer.lock"
+#        run: "composer validate --strict"
+#
+#      - name: "Setup PHP"
+#        uses: "shivammathur/setup-php@v2"
+#        with:
+#          php-version: "${{ matrix.php }}"
+#          extensions: fileinfo, mbstring
+#          ini-values: error_reporting=E_ALL
+#          coverage: none
+#        env:
+#          COMPOSER_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+#
+#      # find composer's cache directory - so we know which directory to cache in the next step
+#      - name: "Find composer's cache directory"
+#        id: "composer-cache"
+#        shell: bash # make sure this step works on Windows - see https://github.com/actions/runner/issues/2224#issuecomment-1289533957
+#        run: |
+#          echo "composer_cache_dir=$(composer config cache-files-dir)">> "$GITHUB_OUTPUT"
+#
+#      - name: "Cache composer's cache directory"
+#        uses: "actions/cache@v3"
+#        with:
+#          path: "${{ steps.composer-cache.outputs.composer_cache_dir }}"
+#          key: "[${{ matrix.os }}][php-${{ matrix.php }}][symfony/dotenv-${{ matrix.symfony-dotenv }}][${{ matrix.dependency-prefer }}][composer.json-${{ hashFiles('composer.json') }}]"
+#
+#      - name: "Install dependencies"
+#        uses: "nick-fields/retry@v2"
+#        with:
+#          timeout_minutes: 5
+#          max_attempts: 5
+#          command: |
+#            composer remove "infection/infection" --dev --no-interaction --no-update
+#            composer remove "phpstan/phpstan" --dev --no-interaction --no-update
+#            composer remove "squizlabs/php_codesniffer" --dev --no-interaction --no-update
+#            composer require "phpunit/phpunit:${{ matrix.phpunit }}" --dev --no-interaction --no-update
+#            composer require "symfony/dotenv:${{ matrix.symfony-dotenv }}" --dev --no-interaction --no-update
+#            composer update --${{ matrix.dependency-prefer }} --prefer-dist --no-interaction --optimize-autoloader --no-progress
+#
+#      - name: "Execute tests"
+#        run: vendor/bin/phpunit "--configuration=${{ matrix.phpunit-config-file }}" --no-coverage --stop-on-error --stop-on-failure
 
-      - name: Install dependencies (composer)
-        run: |
-          composer require "vlucas/phpdotenv:${{ matrix.vlucas-phpdotenv }}" --no-interaction --no-update
-          composer require "phpunit/phpunit:${{ matrix.phpunit }}" --dev --no-interaction --no-update
-          composer update --${{ matrix.dependency-prefer }} --prefer-dist --no-interaction
-
-      - name: Execute tests
-        run: vendor/bin/phpunit
 
 
+  symfony-dotenv-php74-73-72-71-70:
 
-  symfony-dotenv-6:
-
-    name: PHP ${{ matrix.php }} - symfony/dotenv ${{ matrix.symfony-dotenv }} - ${{ matrix.os }} - ${{ matrix.dependency-prefer }}
-    runs-on: ${{ matrix.os }}
+    name: "PHP${{ matrix.php }} symfony/dotenv ${{ matrix.symfony-dotenv }} ${{ matrix.os-title }} ${{ matrix.dependency-prefer-title }}"
+    runs-on: "${{ matrix.os }}"
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-        php: [8.2, 8.1, "8.0"]
-        symfony-dotenv: [^6.0]
-        dependency-prefer: [prefer-stable, prefer-lowest]
+        os: [ "ubuntu-latest", "macos-latest", "windows-latest" ]
+        php: [ "7.4", "7.3", "7.2", "7.1", "7.0" ]
+        symfony-dotenv: [ "^6.0", "^5.0", "^4.0", "^3.3" ]
+        dependency-prefer: [ "prefer-stable", "prefer-lowest" ]
         include:
-          - php: 8.2
-            phpunit: ^9.3
-          - php: 8.1
-            phpunit: ^9.3
-          - php: "8.0"
-            phpunit: ^9.3
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php }}
-          extensions: fileinfo, mbstring
-          coverage: none
-
-#      # find out composer's cache directory on the current os - for the "Cache dependencies (composer)" step below
-#      - name: Determine composer's cache directory
-#        id: composer-cache
-#        run: |
-#          echo "::set-output name=dir::$(composer config cache-files-dir)"
-#
-#      - name: Cache dependencies (composer)
-#        uses: actions/cache@v2
-#        with:
-#          path: ${{ steps.composer-cache.outputs.dir }}
-#          key: php-${{ matrix.php }}-symfony-dotenv-${{ matrix.symfony-dotenv }}-os-${{ matrix.os }}-dependency-prefer-${{ matrix.dependency-prefer }}-composer-${{ hashFiles('composer.json') }}
-
-      - name: Install dependencies (composer)
-        run: |
-          composer require "symfony/dotenv:${{ matrix.symfony-dotenv }}" "phpunit/phpunit:${{ matrix.phpunit }}" --dev --no-interaction --no-update
-          composer update --${{ matrix.dependency-prefer }} --prefer-dist --no-interaction
-
-      - name: Execute tests
-        run: vendor/bin/phpunit
-
-  symfony-dotenv-5:
-
-    name: PHP ${{ matrix.php }} - symfony/dotenv ${{ matrix.symfony-dotenv }} - ${{ matrix.os }} - ${{ matrix.dependency-prefer }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: true
-      matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-        php: [7.4, 7.3, 7.2]
-        symfony-dotenv: [^5.0]
-        dependency-prefer: [prefer-stable, prefer-lowest]
-        include:
-          - php: 7.4
-            phpunit: ^9.0
-          - php: 7.3
-            phpunit: ^9.0
-          - php: 7.2
-            phpunit: ^8.0
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php }}
-          extensions: fileinfo, mbstring
-          coverage: none
-
-#      # find out composer's cache directory on the current os - for the "Cache dependencies (composer)" step below
-#      - name: Determine composer's cache directory
-#        id: composer-cache
-#        run: |
-#          echo "::set-output name=dir::$(composer config cache-files-dir)"
-#
-#      - name: Cache dependencies (composer)
-#        uses: actions/cache@v2
-#        with:
-#          path: ${{ steps.composer-cache.outputs.dir }}
-#          key: php-${{ matrix.php }}-symfony-dotenv-${{ matrix.symfony-dotenv }}-os-${{ matrix.os }}-dependency-prefer-${{ matrix.dependency-prefer }}-composer-${{ hashFiles('composer.json') }}
-
-      - name: Install dependencies (composer)
-        run: |
-          composer require "symfony/dotenv:${{ matrix.symfony-dotenv }}" "phpunit/phpunit:${{ matrix.phpunit }}" --dev --no-interaction --no-update
-          composer update --${{ matrix.dependency-prefer }} --prefer-dist --no-interaction
-
-      - name: Execute tests
-        run: vendor/bin/phpunit
-
-  symfony-dotenv-4:
-
-    name: PHP ${{ matrix.php }} - symfony/dotenv ${{ matrix.symfony-dotenv }} - ${{ matrix.os }} - ${{ matrix.dependency-prefer }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: true
-      matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-        php: [7.4, 7.3, 7.2, 7.1]
-        symfony-dotenv: [^4.0]
-        dependency-prefer: [prefer-stable, prefer-lowest]
-        include:
-          - php: 7.4
-            phpunit: ^9.0
-          - php: 7.3
-            phpunit: ^9.0
-          - php: 7.2
-            phpunit: ^8.0
-          - php: 7.1
-            phpunit: ^7.0
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php }}
-          extensions: fileinfo, mbstring
-          coverage: none
-
-#      # find out composer's cache directory on the current os - for the "Cache dependencies (composer)" step below
-#      - name: Determine composer's cache directory
-#        id: composer-cache
-#        run: |
-#          echo "::set-output name=dir::$(composer config cache-files-dir)"
-#
-#      - name: Cache dependencies (composer)
-#        uses: actions/cache@v2
-#        with:
-#          path: ${{ steps.composer-cache.outputs.dir }}
-#          key: php-${{ matrix.php }}-symfony-dotenv-${{ matrix.symfony-dotenv }}-os-${{ matrix.os }}-dependency-prefer-${{ matrix.dependency-prefer }}-composer-${{ hashFiles('composer.json') }}
-
-      - name: Install dependencies (composer)
-        run: |
-          composer require "symfony/dotenv:${{ matrix.symfony-dotenv }}" "phpunit/phpunit:${{ matrix.phpunit }}" --dev --no-interaction --no-update
-          composer update --${{ matrix.dependency-prefer }} --prefer-dist --no-interaction
-
-      - name: Execute tests
-        run: vendor/bin/phpunit
-
-  symfony-dotenv-33:
-
-    name: PHP ${{ matrix.php }} - symfony/dotenv ${{ matrix.symfony-dotenv }} - ${{ matrix.os }} - ${{ matrix.dependency-prefer }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: true
-      matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-        php: [8.2, 8.1, "8.0", 7.4, 7.3, 7.2, 7.1, "7.0"]
-        symfony-dotenv: [^3.3]
-        dependency-prefer: [prefer-stable, prefer-lowest]
-        include:
-          - php: 8.2
-            phpunit: ^9.3
-          - php: 8.1
-            phpunit: ^9.3
-          - php: "8.0"
-            phpunit: ^9.3
-          - php: 7.4
-            phpunit: ^9.0
-          - php: 7.3
-            phpunit: ^9.0
-          - php: 7.2
-            phpunit: ^8.0
-          - php: 7.1
-            phpunit: ^7.0
+          - php: "7.4"
+            phpunit: "^9.3"
+            phpunit-config-file: "phpunit.github-actions.up-to-9.xml.dist"
+          - php: "7.3"
+            phpunit: "^9.3"
+            phpunit-config-file: "phpunit.github-actions.up-to-9.xml.dist"
+          - php: "7.2"
+            phpunit: "^8.0"
+            phpunit-config-file: "phpunit.github-actions.up-to-9.xml.dist"
+          - php: "7.1"
+            phpunit: "^7.0"
+            phpunit-config-file: "phpunit.github-actions.up-to-9.xml.dist"
           - php: "7.0"
-            phpunit: ^6.0
+            phpunit: "^6.0"
+            phpunit-config-file: "phpunit.github-actions.up-to-9.xml.dist"
+          - os: "ubuntu-latest"
+            os-title: "ubuntu"
+          - os: "macos-latest"
+            os-title: "macos"
+          - os: "windows-latest"
+            os-title: "win"
+          - dependency-prefer: "prefer-stable"
+            dependency-prefer-title: "stable"
+          - dependency-prefer: "prefer-lowest"
+            dependency-prefer-title: "lowest"
         exclude:
-          - os: windows-latest
-            symfony-dotenv: ^3.3 # symfony-dotenv on Windows can't read multiple values with different capitalisations at once (e.g. "On" and "on")
-          - php: 8.1
-            dependency-prefer: prefer-lowest
-            symfony-dotenv: ^3.3 # "Deprecated: preg_match(): Passing null to parameter #4 ($flags) of type int is deprecated" exists in symfony-dotenv before 3.3.14
+          - php: "7.4"
+            symfony-dotenv: "^6.0"
+          - php: "7.3"
+            symfony-dotenv: "^6.0"
+          - php: "7.2"
+            symfony-dotenv: "^6.0"
+          - php: "7.1"
+            symfony-dotenv: "^6.0"
+          - php: "7.1"
+            symfony-dotenv: "^5.0"
+          - php: "7.0"
+            symfony-dotenv: "^6.0"
+          - php: "7.0"
+            symfony-dotenv: "^5.0"
+          - php: "7.0"
+            symfony-dotenv: "^4.0"
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
 
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+      - name: "Checkout code"
+        uses: "actions/checkout@v4"
+
+      - name: "Validate composer.json and composer.lock"
+        run: "composer validate --strict"
+
+      - name: "Setup PHP"
+        uses: "shivammathur/setup-php@v2"
         with:
-          php-version: ${{ matrix.php }}
+          php-version: "${{ matrix.php }}"
           extensions: fileinfo, mbstring
+          ini-values: error_reporting=E_ALL
           coverage: none
+        env:
+          COMPOSER_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
 
-#      # find out composer's cache directory on the current os - for the "Cache dependencies (composer)" step below
-#      - name: Determine composer's cache directory
-#        id: composer-cache
-#        run: |
-#          echo "::set-output name=dir::$(composer config cache-files-dir)"
-#
-#      - name: Cache dependencies (composer)
-#        uses: actions/cache@v2
-#        with:
-#          path: ${{ steps.composer-cache.outputs.dir }}
-#          key: php-${{ matrix.php }}-symfony-dotenv-${{ matrix.symfony-dotenv }}-os-${{ matrix.os }}-dependency-prefer-${{ matrix.dependency-prefer }}-composer-${{ hashFiles('composer.json') }}
-
-      - name: Install dependencies (composer)
+      # find composer's cache directory - so we know which directory to cache in the next step
+      - name: "Find composer's cache directory"
+        id: "composer-cache"
+        shell: bash # make sure this step works on Windows - see https://github.com/actions/runner/issues/2224#issuecomment-1289533957
         run: |
-          composer require "symfony/dotenv:${{ matrix.symfony-dotenv }}" "phpunit/phpunit:${{ matrix.phpunit }}" --dev --no-interaction --no-update
-          composer update --${{ matrix.dependency-prefer }} --prefer-dist --no-interaction
+          echo "composer_cache_dir=$(composer config cache-files-dir)">> "$GITHUB_OUTPUT"
 
-      - name: Execute tests
-        run: vendor/bin/phpunit
+      - name: "Cache composer's cache directory"
+        uses: "actions/cache@v3"
+        with:
+          path: "${{ steps.composer-cache.outputs.composer_cache_dir }}"
+          key: "[${{ matrix.os }}][php-${{ matrix.php }}][symfony/dotenv-${{ matrix.symfony-dotenv }}][${{ matrix.dependency-prefer }}][composer.json-${{ hashFiles('composer.json') }}]"
+
+      - name: "Install dependencies"
+        uses: "nick-fields/retry@v2"
+        with:
+          timeout_minutes: 5
+          max_attempts: 5
+          command: |
+            composer remove "infection/infection" --dev --no-interaction --no-update
+            composer remove "phpstan/phpstan" --dev --no-interaction --no-update
+            composer remove "squizlabs/php_codesniffer" --dev --no-interaction --no-update
+            composer require "phpunit/phpunit:${{ matrix.phpunit }}" --dev --no-interaction --no-update
+            composer require "symfony/dotenv:${{ matrix.symfony-dotenv }}" --dev --no-interaction --no-update
+            composer update --${{ matrix.dependency-prefer }} --prefer-dist --no-interaction --optimize-autoloader --no-progress
+
+      - name: "Execute tests"
+        run: vendor/bin/phpunit "--configuration=${{ matrix.phpunit-config-file }}" --no-coverage --stop-on-error --stop-on-failure
+
+
+
+#  symfony-dotenv-6:
+#
+#    name: PHP ${{ matrix.php }} - symfony/dotenv ${{ matrix.symfony-dotenv }} - ${{ matrix.os }} - ${{ matrix.dependency-prefer }}
+#    runs-on: ${{ matrix.os }}
+#    strategy:
+#      fail-fast: true
+#      matrix:
+#        os: [ubuntu-latest, macos-latest, windows-latest]
+#        php: [8.2, 8.1, "8.0"]
+#        symfony-dotenv: [^6.0]
+#        dependency-prefer: [prefer-stable, prefer-lowest]
+#        phpunit-config-file: ["phpunit.up-to-9.xml.dist"]
+#        include:
+#          - php: 8.2
+#            phpunit: ^9.3
+#          - php: 8.1
+#            phpunit: ^9.3
+#          - php: "8.0"
+#            phpunit: ^9.3
+#
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v2
+#
+#      - name: Setup PHP
+#        uses: shivammathur/setup-php@v2
+#        with:
+#          php-version: ${{ matrix.php }}
+#          extensions: fileinfo, mbstring
+#          coverage: none
+#
+##      # find out composer's cache directory on the current os - for the "Cache dependencies (composer)" step below
+##      - name: Determine composer's cache directory
+##        id: composer-cache
+##        run: |
+##          echo "::set-output name=dir::$(composer config cache-files-dir)"
+##
+##      - name: Cache dependencies (composer)
+##        uses: actions/cache@v2
+##        with:
+##          path: ${{ steps.composer-cache.outputs.dir }}
+##          key: php-${{ matrix.php }}-symfony-dotenv-${{ matrix.symfony-dotenv }}-os-${{ matrix.os }}-dependency-prefer-${{ matrix.dependency-prefer }}-composer-${{ hashFiles('composer.json') }}
+#
+#      - name: Install dependencies (composer)
+#        run: |
+#          composer require "symfony/dotenv:${{ matrix.symfony-dotenv }}" "phpunit/phpunit:${{ matrix.phpunit }}" --dev --no-interaction --no-update
+#          composer update --${{ matrix.dependency-prefer }} --prefer-dist --no-interaction
+#
+#      - name: Execute tests
+#        run: vendor/bin/phpunit --configuration=${{ matrix.phpunit-config-file }} --no-coverage --stop-on-error --stop-on-failure
+#
+#  symfony-dotenv-5:
+#
+#    name: PHP ${{ matrix.php }} - symfony/dotenv ${{ matrix.symfony-dotenv }} - ${{ matrix.os }} - ${{ matrix.dependency-prefer }}
+#    runs-on: ${{ matrix.os }}
+#    strategy:
+#      fail-fast: true
+#      matrix:
+#        os: [ubuntu-latest, macos-latest, windows-latest]
+#        php: [7.4, 7.3, 7.2]
+#        symfony-dotenv: [^5.0]
+#        dependency-prefer: [prefer-stable, prefer-lowest]
+#        phpunit-config-file: ["phpunit.up-to-9.xml.dist"]
+#        include:
+#          - php: 7.4
+#            phpunit: ^9.0
+#          - php: 7.3
+#            phpunit: ^9.0
+#          - php: 7.2
+#            phpunit: ^8.0
+#
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v2
+#
+#      - name: Setup PHP
+#        uses: shivammathur/setup-php@v2
+#        with:
+#          php-version: ${{ matrix.php }}
+#          extensions: fileinfo, mbstring
+#          coverage: none
+#
+##      # find out composer's cache directory on the current os - for the "Cache dependencies (composer)" step below
+##      - name: Determine composer's cache directory
+##        id: composer-cache
+##        run: |
+##          echo "::set-output name=dir::$(composer config cache-files-dir)"
+##
+##      - name: Cache dependencies (composer)
+##        uses: actions/cache@v2
+##        with:
+##          path: ${{ steps.composer-cache.outputs.dir }}
+##          key: php-${{ matrix.php }}-symfony-dotenv-${{ matrix.symfony-dotenv }}-os-${{ matrix.os }}-dependency-prefer-${{ matrix.dependency-prefer }}-composer-${{ hashFiles('composer.json') }}
+#
+#      - name: Install dependencies (composer)
+#        run: |
+#          composer require "symfony/dotenv:${{ matrix.symfony-dotenv }}" "phpunit/phpunit:${{ matrix.phpunit }}" --dev --no-interaction --no-update
+#          composer update --${{ matrix.dependency-prefer }} --prefer-dist --no-interaction
+#
+#      - name: Execute tests
+#        run: vendor/bin/phpunit --configuration=${{ matrix.phpunit-config-file }} --no-coverage --stop-on-error --stop-on-failure
+#
+#  symfony-dotenv-4:
+#
+#    name: PHP ${{ matrix.php }} - symfony/dotenv ${{ matrix.symfony-dotenv }} - ${{ matrix.os }} - ${{ matrix.dependency-prefer }}
+#    runs-on: ${{ matrix.os }}
+#    strategy:
+#      fail-fast: true
+#      matrix:
+#        os: [ubuntu-latest, macos-latest, windows-latest]
+#        php: [7.4, 7.3, 7.2, 7.1]
+#        symfony-dotenv: [^4.0]
+#        dependency-prefer: [prefer-stable, prefer-lowest]
+#        phpunit-config-file: ["phpunit.up-to-9.xml.dist"]
+#        include:
+#          - php: 7.4
+#            phpunit: ^9.0
+#          - php: 7.3
+#            phpunit: ^9.0
+#          - php: 7.2
+#            phpunit: ^8.0
+#          - php: 7.1
+#            phpunit: ^7.0
+#
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v2
+#
+#      - name: Setup PHP
+#        uses: shivammathur/setup-php@v2
+#        with:
+#          php-version: ${{ matrix.php }}
+#          extensions: fileinfo, mbstring
+#          coverage: none
+#
+##      # find out composer's cache directory on the current os - for the "Cache dependencies (composer)" step below
+##      - name: Determine composer's cache directory
+##        id: composer-cache
+##        run: |
+##          echo "::set-output name=dir::$(composer config cache-files-dir)"
+##
+##      - name: Cache dependencies (composer)
+##        uses: actions/cache@v2
+##        with:
+##          path: ${{ steps.composer-cache.outputs.dir }}
+##          key: php-${{ matrix.php }}-symfony-dotenv-${{ matrix.symfony-dotenv }}-os-${{ matrix.os }}-dependency-prefer-${{ matrix.dependency-prefer }}-composer-${{ hashFiles('composer.json') }}
+#
+#      - name: Install dependencies (composer)
+#        run: |
+#          composer require "symfony/dotenv:${{ matrix.symfony-dotenv }}" "phpunit/phpunit:${{ matrix.phpunit }}" --dev --no-interaction --no-update
+#          composer update --${{ matrix.dependency-prefer }} --prefer-dist --no-interaction
+#
+#      - name: Execute tests
+#        run: vendor/bin/phpunit --configuration=${{ matrix.phpunit-config-file }} --no-coverage --stop-on-error --stop-on-failure
+#
+#  symfony-dotenv-33:
+#
+#    name: PHP ${{ matrix.php }} - symfony/dotenv ${{ matrix.symfony-dotenv }} - ${{ matrix.os }} - ${{ matrix.dependency-prefer }}
+#    runs-on: ${{ matrix.os }}
+#    strategy:
+#      fail-fast: true
+#      matrix:
+#        os: [ubuntu-latest, macos-latest, windows-latest]
+#        php: [8.3, 8.2, 8.1, "8.0", 7.4, 7.3, 7.2, 7.1, "7.0"]
+#        symfony-dotenv: [^3.3]
+#        dependency-prefer: [prefer-stable, prefer-lowest]
+#        phpunit-config-file: ["phpunit.xml.dist"]
+#        include:
+#          - php: 8.3
+#            phpunit: "^10.1.0"
+#          - php: 8.2
+#            phpunit: "^10.1.0"
+#          - php: 8.1
+#            phpunit: ^9.3
+#            phpunit-config-file: "phpunit.up-to-9.xml.dist"
+#          - php: "8.0"
+#            phpunit: ^9.3
+#            phpunit-config-file: "phpunit.up-to-9.xml.dist"
+#          - php: 7.4
+#            phpunit: "^9.0"
+#            phpunit-config-file: "phpunit.up-to-9.xml.dist"
+#          - php: 7.3
+#            phpunit: "^9.0"
+#            phpunit-config-file: "phpunit.up-to-9.xml.dist"
+#          - php: 7.2
+#            phpunit: "^8.0"
+#            phpunit-config-file: "phpunit.up-to-9.xml.dist"
+#          - php: 7.1
+#            phpunit: "^7.0"
+#            phpunit-config-file: "phpunit.up-to-9.xml.dist"
+#          - php: "7.0"
+#            phpunit: "^6.0"
+#            phpunit-config-file: "phpunit.up-to-9.xml.dist"
+#        exclude:
+#          - os: windows-latest
+#            symfony-dotenv: ^3.3 # symfony-dotenv on Windows can't read multiple values with different capitalisations at once (e.g. "On" and "on")
+#          - php: 8.1
+#            dependency-prefer: prefer-lowest
+#            symfony-dotenv: ^3.3 # "Deprecated: preg_match(): Passing null to parameter #4 ($flags) of type int is deprecated" exists in symfony-dotenv before 3.3.14
+#
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v2
+#
+#      - name: Setup PHP
+#        uses: shivammathur/setup-php@v2
+#        with:
+#          php-version: ${{ matrix.php }}
+#          extensions: fileinfo, mbstring
+#          coverage: none
+#
+##      # find out composer's cache directory on the current os - for the "Cache dependencies (composer)" step below
+##      - name: Determine composer's cache directory
+##        id: composer-cache
+##        run: |
+##          echo "::set-output name=dir::$(composer config cache-files-dir)"
+##
+##      - name: Cache dependencies (composer)
+##        uses: actions/cache@v2
+##        with:
+##          path: ${{ steps.composer-cache.outputs.dir }}
+##          key: php-${{ matrix.php }}-symfony-dotenv-${{ matrix.symfony-dotenv }}-os-${{ matrix.os }}-dependency-prefer-${{ matrix.dependency-prefer }}-composer-${{ hashFiles('composer.json') }}
+#
+#      - name: Install dependencies (composer)
+#        run: |
+#          composer require "symfony/dotenv:${{ matrix.symfony-dotenv }}" "phpunit/phpunit:${{ matrix.phpunit }}" --dev --no-interaction --no-update
+#          composer update --${{ matrix.dependency-prefer }} --prefer-dist --no-interaction
+#
+#      - name: Execute tests
+#        run: vendor/bin/phpunit --configuration=${{ matrix.phpunit-config-file }} --no-coverage --stop-on-error --stop-on-failure

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="./vendor/phpunit/phpunit/phpunit.xsd"
+  backupGlobals="true"
+  backupStaticAttributes="true"
+  beStrictAboutOutputDuringTests="true"
+  bootstrap="vendor/autoload.php"
+  colors="false"
+  convertDeprecationsToExceptions="false"
+  convertErrorsToExceptions="true"
+  convertNoticesToExceptions="true"
+  convertWarningsToExceptions="true"
+  failOnIncomplete="true"
+  failOnRisky="true"
+  failOnSkipped="true"
+  failOnWarning="true"
+  stopOnDefect="true"
+  stopOnError="true"
+  stopOnFailure="true"
+  stopOnIncomplete="true"
+  stopOnRisky="true"
+  stopOnSkipped="true"
+  stopOnWarning="true"
+  verbose="true"
+>
+  <testsuites>
+    <testsuite name="Unit">
+      <directory suffix="Test.php">./tests/Unit</directory>
+    </testsuite>
+  </testsuites>
+</phpunit>

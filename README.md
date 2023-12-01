@@ -1,7 +1,7 @@
 # Fluent dotenv
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/code-distortion/fluent-dotenv.svg?style=flat-square)](https://packagist.org/packages/code-distortion/fluent-dotenv)
-![PHP Version](https://img.shields.io/badge/PHP-7.0%20to%208.2-blue?style=flat-square)
+![PHP Version](https://img.shields.io/badge/PHP-7.0%20to%208.3-blue?style=flat-square)
 ![vlucas/phpdotenv](https://img.shields.io/badge/vlucas%2Fphpdotenv-1+-blue?style=flat-square)
 ![symfony/dotenv](https://img.shields.io/badge/symfony%2Fdotenv-3.3+-blue?style=flat-square)
 [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/code-distortion/fluent-dotenv/run-tests.yml?branch=master&style=flat-square)](https://github.com/code-distortion/fluent-dotenv/actions)
