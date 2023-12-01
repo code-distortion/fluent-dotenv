@@ -56,7 +56,7 @@ class FluentDotEnvTest extends PHPUnitTestCase
      *
      * @return array[]
      */
-    public function CanImportProperlyDataProvider()
+    public static function CanImportProperlyDataProvider()
     {
         $notImported = [
             'UNTOUCHED_KEY' => 'untouched-value',
@@ -531,7 +531,7 @@ class FluentDotEnvTest extends PHPUnitTestCase
      *
      * @return array[]
      */
-    public function CanCallMethodsInDifferentWaysDataProvider()
+    public static function CanCallMethodsInDifferentWaysDataProvider()
     {
         $imported = [
             'INITIAL_KEY' => 'override-value',
@@ -932,7 +932,7 @@ class FluentDotEnvTest extends PHPUnitTestCase
      *
      * @return array[]
      */
-    public function canCallValidationAfterLoadDataProvider()
+    public static function canCallValidationAfterLoadDataProvider()
     {
         $validCallback = function (string $key, $value) {
             return true;
@@ -1230,7 +1230,7 @@ class FluentDotEnvTest extends PHPUnitTestCase
      *
      * @return array[]
      */
-    public function canCastProperlyDataProvider()
+    public static function canCastProperlyDataProvider()
     {
         $boolean = [
             'true' => true,
@@ -1299,7 +1299,7 @@ class FluentDotEnvTest extends PHPUnitTestCase
      *
      * @return array[]
      */
-    public function canGetMultipleValuesDataProvider()
+    public static function canGetMultipleValuesDataProvider()
     {
         return [
             // GET

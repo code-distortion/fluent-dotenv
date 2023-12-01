@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.1/phpunit.xsd"
+  xsi:noNamespaceSchemaLocation="./vendor/phpunit/phpunit/phpunit.xsd"
   bootstrap="vendor/autoload.php"
   colors="true"
-  cacheDirectory="phpunit/cache"
 >
   <testsuites>
     <testsuite name="Unit">
       <directory suffix="Test.php">./tests/Unit</directory>
     </testsuite>
+    <testsuite name="Integration">
+      <directory suffix="Test.php">./tests/Integration</directory>
+    </testsuite>
   </testsuites>
-  <coverage>
-    <report>
-      <html outputDirectory="phpunit/coverage"/>
-    </report>
-  </coverage>
-  <source>
+  <coverage processUncoveredFiles="true">
     <include>
       <directory suffix=".php">./src</directory>
     </include>
-  </source>
+    <report>
+      <html outputDirectory="build/coverage"/>
+    </report>
+  </coverage>
 </phpunit>
