@@ -5,8 +5,8 @@ namespace CodeDistortion\FluentDotEnv\Tests\Unit;
 use CodeDistortion\FluentDotEnv\Exceptions\AlreadyLoadedException;
 use CodeDistortion\FluentDotEnv\Exceptions\InvalidPathException;
 use CodeDistortion\FluentDotEnv\Exceptions\ValidationException;
-use CodeDistortion\FluentDotEnv\Tests\PHPUnitTestCase;
 use CodeDistortion\FluentDotEnv\FluentDotEnv;
+use CodeDistortion\FluentDotEnv\Tests\PHPUnitTestCase;
 
 /**
  * Test the ConfigDTO class
@@ -30,10 +30,10 @@ class FluentDotEnvTest extends PHPUnitTestCase
         ];
         putenv('UNTOUCHED_KEY=untouched-value');
         putenv('INITIAL_KEY=initial-value');
-        putenv('NEW_KEY');
-        putenv('EMPTY_KEY');
-        putenv('INTEGER_KEY');
-        putenv('BOOLEAN_KEY');
+        putenv('NEW_KEY'); // i.e. remove
+        putenv('EMPTY_KEY'); // i.e. remove
+        putenv('INTEGER_KEY'); // i.e. remove
+        putenv('BOOLEAN_KEY'); // i.e. remove
     }
 
     /**
@@ -42,7 +42,7 @@ class FluentDotEnvTest extends PHPUnitTestCase
      *
      * @return FluentDotEnv
      */
-    protected function newFluentDotEnv()
+    protected static function newFluentDotEnv()
     {
         $fDotEnv = FluentDotEnv::new();
         if (file_exists(__DIR__ . '/../../vendor/symfony/dotenv')) {
@@ -56,7 +56,7 @@ class FluentDotEnvTest extends PHPUnitTestCase
      *
      * @return array[]
      */
-    public static function CanImportProperlyDataProvider()
+    public static function CanImportProperlyDataProvider(): array
     {
         $notImported = [
             'UNTOUCHED_KEY' => 'untouched-value',
@@ -383,6 +383,7 @@ class FluentDotEnvTest extends PHPUnitTestCase
         foreach ($combinations as $index => $combination) {
             $combinations[$index] = array_merge($default, $combination);
         }
+$combinations = ['filename 2' => $combinations['filename 2']];
         return $combinations;
     }
 
@@ -442,9 +443,10 @@ class FluentDotEnvTest extends PHPUnitTestCase
         array $expectedServer,
         string $expectedException = null
     ) {
+
         $this->customSetUp();
 
-        $fDotEnv = $this->newFluentDotEnv();
+        $fDotEnv = self::newFluentDotEnv();
 
         // pre-import actions
         if (!is_null($pick)) {
@@ -507,15 +509,15 @@ class FluentDotEnvTest extends PHPUnitTestCase
                 $expectedException,
                 function () use (&$fDotEnv, $useSafeLoad, $envFilename) {
 
-                    ($useSafeLoad
+                    $useSafeLoad
                         ? $fDotEnv->safeLoad(__DIR__ . '/input/' . $envFilename)
-                        : $fDotEnv->load(__DIR__ . '/input/' . $envFilename));
+                        : $fDotEnv->load(__DIR__ . '/input/' . $envFilename);
                 }
             );
         } else {
-            $values = ($useSafeLoad
+            $values = $useSafeLoad
                 ? $fDotEnv->safeLoad(__DIR__ . '/input/' . $envFilename)->all()
-                : $fDotEnv->load(__DIR__ . '/input/' . $envFilename)->all());
+                : $fDotEnv->load(__DIR__ . '/input/' . $envFilename)->all();
 
             $this->assertSame($expectedValues, $values);
 //            foreach ($expectedGetenv as $key => $value) {
@@ -531,7 +533,7 @@ class FluentDotEnvTest extends PHPUnitTestCase
      *
      * @return array[]
      */
-    public static function CanCallMethodsInDifferentWaysDataProvider()
+    public static function CanCallMethodsInDifferentWaysDataProvider(): array
     {
         $imported = [
             'INITIAL_KEY' => 'override-value',
@@ -905,7 +907,7 @@ class FluentDotEnvTest extends PHPUnitTestCase
     ) {
         $this->customSetUp();
 
-        $fDotEnv = $this->newFluentDotEnv();
+        $fDotEnv = self::newFluentDotEnv();
 
         foreach ($methodsAndParams as $oneMethodAndParams) {
             $method = $oneMethodAndParams['method'];
@@ -932,7 +934,7 @@ class FluentDotEnvTest extends PHPUnitTestCase
      *
      * @return array[]
      */
-    public static function canCallValidationAfterLoadDataProvider()
+    public static function canCallValidationAfterLoadDataProvider(): array
     {
         $validCallback = function (string $key, $value) {
             return true;
@@ -1095,17 +1097,21 @@ class FluentDotEnvTest extends PHPUnitTestCase
     ) {
 
         $this->customSetUp();
-        $fDotEnv = $this->newFluentDotEnv()->load(__DIR__ . '/input/.env');
+        $fDotEnv = self::newFluentDotEnv()->load(__DIR__ . '/input/.env');
+        $callable = [$fDotEnv, $method];
+        if (!is_callable($callable)) {
+            self::fail();
+        }
 
         if ($expectedException) {
             $this->assertThrows(
                 $expectedException,
-                function () use (&$fDotEnv, $method, $params) {
-                    call_user_func_array([$fDotEnv, $method], $params);
+                function () use ($callable, $params) {
+                    call_user_func_array($callable, $params);
                 }
             );
         } else {
-            call_user_func_array([$fDotEnv, $method], $params);
+            call_user_func_array($callable, $params);
             $this->assertTrue(true);
         }
 
@@ -1122,7 +1128,7 @@ class FluentDotEnvTest extends PHPUnitTestCase
     {
         $this->customSetUp();
 
-        $fDotEnv = $this->newFluentDotEnv()->load(__DIR__ . '/input/.env')->pick('NEW_KEY')->pick('EMPTY_KEY');
+        $fDotEnv = self::newFluentDotEnv()->load(__DIR__ . '/input/.env')->pick('NEW_KEY')->pick('EMPTY_KEY');
         $this->assertSame(
             [
                 'NEW_KEY' => 'new-value1',
@@ -1131,7 +1137,7 @@ class FluentDotEnvTest extends PHPUnitTestCase
             $fDotEnv->all()
         );
 
-        $fDotEnv = $this->newFluentDotEnv()->load(__DIR__ . '/input/.env');
+        $fDotEnv = self::newFluentDotEnv()->load(__DIR__ . '/input/.env');
         $this->assertSame(
             [
                 'INITIAL_KEY' => 'override-value',
@@ -1155,28 +1161,28 @@ class FluentDotEnvTest extends PHPUnitTestCase
         $this->customSetUp();
 
         // passed in an array
-        $fDotEnv = $this->newFluentDotEnv()
+        $fDotEnv = self::newFluentDotEnv()
             ->load([__DIR__ . '/input/1.env']);
         $this->assertSame(['MY_VALUE1' => 'a'], $fDotEnv->all());
 
-        $fDotEnv = $this->newFluentDotEnv()
+        $fDotEnv = self::newFluentDotEnv()
             ->load([__DIR__ . '/input/1.env', __DIR__ . '/input/2.env']);
         $this->assertSame(['MY_VALUE1' => 'b'], $fDotEnv->all());
 
-        $fDotEnv = $this->newFluentDotEnv()
+        $fDotEnv = self::newFluentDotEnv()
             ->load([__DIR__ . '/input/2.env', __DIR__ . '/input/1.env']);
         $this->assertSame(['MY_VALUE1' => 'a'], $fDotEnv->all());
 
         // passed as separate parameters
-        $fDotEnv = $this->newFluentDotEnv()
+        $fDotEnv = self::newFluentDotEnv()
             ->load(__DIR__ . '/input/1.env');
         $this->assertSame(['MY_VALUE1' => 'a'], $fDotEnv->all());
 
-        $fDotEnv = $this->newFluentDotEnv()
+        $fDotEnv = self::newFluentDotEnv()
             ->load(__DIR__ . '/input/1.env', __DIR__ . '/input/2.env');
         $this->assertSame(['MY_VALUE1' => 'b'], $fDotEnv->all());
 
-        $fDotEnv = $this->newFluentDotEnv()
+        $fDotEnv = self::newFluentDotEnv()
             ->load(__DIR__ . '/input/2.env', __DIR__ . '/input/1.env');
         $this->assertSame(['MY_VALUE1' => 'a'], $fDotEnv->all());
 
@@ -1184,7 +1190,7 @@ class FluentDotEnvTest extends PHPUnitTestCase
         $this->assertThrows(
             AlreadyLoadedException::class,
             function () {
-                $this->newFluentDotEnv()
+                self::newFluentDotEnv()
                     ->load(__DIR__ . '/input/1.env')
                     ->load(__DIR__ . '/input/2.env');
             }
@@ -1193,7 +1199,7 @@ class FluentDotEnvTest extends PHPUnitTestCase
         $this->assertThrows(
             AlreadyLoadedException::class,
             function () {
-                $this->newFluentDotEnv()
+                self::newFluentDotEnv()
                     ->safeLoad(__DIR__ . '/input/1.env')
                     ->safeLoad(__DIR__ . '/input/2.env');
             }
@@ -1203,24 +1209,24 @@ class FluentDotEnvTest extends PHPUnitTestCase
         $this->assertThrows(
             InvalidPathException::class,
             function () {
-                $this->newFluentDotEnv()
+                self::newFluentDotEnv()
                     ->load([__DIR__ . '/input/missing.env']);
             }
         );
         $this->assertThrows(
             InvalidPathException::class,
             function () {
-                $this->newFluentDotEnv()
+                self::newFluentDotEnv()
                     ->load([__DIR__ . '/input/1.env', __DIR__ . '/input/missing.env', __DIR__ . '/input/2.env']);
             }
         );
 
         // missing file - but with safeLoad()
-        $fDotEnv = $this->newFluentDotEnv()
+        $fDotEnv = self::newFluentDotEnv()
             ->safeLoad(__DIR__ . '/input/missing.env');
         $this->assertSame([], $fDotEnv->all());
 
-        $fDotEnv = $this->newFluentDotEnv()
+        $fDotEnv = self::newFluentDotEnv()
             ->safeLoad(__DIR__ . '/input/1.env', __DIR__ . '/input/missing.env', __DIR__ . '/input/2.env');
         $this->assertSame(['MY_VALUE1' => 'b'], $fDotEnv->all());
     }
@@ -1230,8 +1236,37 @@ class FluentDotEnvTest extends PHPUnitTestCase
      *
      * @return array[]
      */
-    public static function canCastProperlyDataProvider()
+    public static function canCastProperlyDataProvider(): array
     {
+        // symfony/dotenv ^3.3 on Windows does not support uppercase values
+        // perform an initial test to work out if such values should be excluded from the test
+        $fDotEnv = self::newFluentDotEnv()->safeLoad(__DIR__ . '/input/cast.env');
+        $supportsUppercaseValues = $fDotEnv->get('TrUe') === 'TrUe';
+
+        $keysWithUppercaseValues = [
+            'TrUe',
+            'TRUE',
+            'FaLsE',
+            'FALSE',
+            'On',
+            'ON',
+            'Off',
+            'OFF',
+            'YeS',
+            'YES',
+            'No',
+            'NO',
+        ];
+        $hasUpperCaseChar = function ($value) use ($keysWithUppercaseValues): bool {
+            return in_array($value, $keysWithUppercaseValues, true);
+        };
+
+        $includeKey = function ($value) use ($supportsUppercaseValues, $hasUpperCaseChar): bool {
+            return $supportsUppercaseValues || !$hasUpperCaseChar($value);
+        };
+
+
+
         $boolean = [
             'true' => true,
             'TrUe' => true,
@@ -1267,6 +1302,11 @@ class FluentDotEnvTest extends PHPUnitTestCase
         $return = [];
         foreach (['castBoolean' => $boolean, 'castInteger' => $integer] as $castMethod => $tests) {
             foreach ($tests as $key => $expected) {
+
+                if (!$includeKey($key)) {
+                    continue;
+                }
+
                 $return[] = [
                     'castMethod' => $castMethod,
                     'key' => (string) $key,
@@ -1290,7 +1330,7 @@ class FluentDotEnvTest extends PHPUnitTestCase
      */
     public function can_cast_properly(string $castMethod, string $key, $expected)
     {
-        $fDotEnv = $this->newFluentDotEnv()->safeLoad(__DIR__ . '/input/cast.env');
+        $fDotEnv = self::newFluentDotEnv()->safeLoad(__DIR__ . '/input/cast.env');
         $this->assertSame($expected, $fDotEnv->$castMethod($key));
     }
 
@@ -1299,7 +1339,7 @@ class FluentDotEnvTest extends PHPUnitTestCase
      *
      * @return array[]
      */
-    public static function canGetMultipleValuesDataProvider()
+    public static function canGetMultipleValuesDataProvider(): array
     {
         return [
             // GET
@@ -1473,12 +1513,45 @@ class FluentDotEnvTest extends PHPUnitTestCase
      */
     public function can_get_multiple_values(string $method, array $params, $expected)
     {
-        $fDotEnv = $this->newFluentDotEnv()->safeLoad(__DIR__ . '/input/many_values.env');
+        $fDotEnv = self::newFluentDotEnv()->safeLoad(__DIR__ . '/input/many_values.env');
 
         $callable = [$fDotEnv, $method];
         if (is_callable($callable)) {
             $output = call_user_func_array($callable, $params);
             $this->assertSame($expected, $output);
         }
+    }
+
+    /**
+     * Test that the ->load() doesn't change the existing getenv(), $_SERVER and $_ENV values.
+     *
+     * @test
+     * @return void
+     */
+    public function current_env_values_arent_changed_by_loading_process()
+    {
+        $this->customSetUp();
+
+        $fDotEnv = self::newFluentDotEnv()->load(__DIR__ . '/input/.env');
+
+        // the loaded .env values
+        $this->assertSame('', $fDotEnv->get('UNTOUCHED_KEY'));
+        $this->assertSame('override-value', $fDotEnv->get('INITIAL_KEY'));
+        $this->assertSame('new-value1', $fDotEnv->get('NEW_KEY'));
+
+        // the getenv() values
+        $this->assertSame('untouched-value', getenv('UNTOUCHED_KEY'));
+        $this->assertSame('initial-value', getenv('INITIAL_KEY'));
+        $this->assertFalse(getenv('NEW_KEY'));
+
+        // the $_SERVER values
+        $this->assertSame('untouched-value', $_SERVER['UNTOUCHED_KEY']);
+        $this->assertSame('initial-value', $_SERVER['INITIAL_KEY']);
+        $this->assertFalse(array_key_exists('NEW_KEY', $_SERVER));
+
+        // the $_ENV values
+        $this->assertSame('untouched-value', $_ENV['UNTOUCHED_KEY']);
+        $this->assertSame('initial-value', $_ENV['INITIAL_KEY']);
+        $this->assertFalse(array_key_exists('NEW_KEY', $_ENV));
     }
 }

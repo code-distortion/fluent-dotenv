@@ -12,54 +12,111 @@ class GetenvSupport
     /**
      * Get the full list of current getenv() values.
      *
-     * @return mixed[]
+     * @return array<string, string>
      */
-    public static function getenvValues(): array
+    public static function getAllGetenvVariables(): array
     {
         if ((!function_exists('getenv')) || (!function_exists('putenv'))) {
             return [];
         }
 
-        // getenv requires a $key to be passed to it before PHP 7.1
+        // getenv() requires a $key to be passed to it before PHP 7.1
         try {
-            return (array) getenv();
+
+            return @(array) getenv();
+
         } catch (Throwable $e) {
+
+            // if needed, get the getenv() values individually
+            $values = [];
+            foreach (array_keys($_ENV) as $key) {
+                $values[$key] = getenv($key);
+            }
+            return $values;
+        }
+    }
+
+    /**
+     * Get the current getenv() values for the given keys.
+     *
+     * @param string[] $keys The keys to return values for.
+     * @return array<string, string>
+     */
+    public static function getParticularGetenvVariables(array $keys): array
+    {
+        if ((!function_exists('getenv')) || (!function_exists('putenv'))) {
+            return [];
         }
 
-        // if needed, get the getenv() values individually
         $values = [];
-        foreach (array_keys($_ENV) as $key) {
-            $values[$key] = getenv($key);
+        foreach ($keys as $key) {
+            $value = getenv($key);
+            if ($value !== false) {
+                $values[$key] = $value;
+            }
         }
         return $values;
     }
 
     /**
-     * Set getenv() to contain the given values.
+     * Remove particular getenv() values.
      *
-     * @param string[] $values The values to replace getenv() values with.
+     * @param string[] $keys The keys to remove.
      * @return void
      */
-    public static function replaceGetenv(array $values)
+    public static function removeGetenvVariables(array $keys)
+    {
+        foreach ($keys as $key) {
+            putenv($key); // clear existing
+        }
+    }
+
+    /**
+     * Set new getenv() values.
+     *
+     * @param array<string, string> $values The values to add to getenv().
+     * @return void
+     */
+    public static function addGetenvVariables(array $values)
+    {
+        foreach ($values as $key => $value) {
+            putenv("$key=$value");
+        }
+    }
+
+    /**
+     * Set getenv() to contain the given values. This replaces the current set of values.
+     *
+     * @param array<string, string> $newValues The values to replace getenv() values with.
+     * @return void
+     */
+    public static function replaceAllGetenvVariables(array $newValues)
     {
         if ((!function_exists('getenv')) || (!function_exists('putenv'))) {
             return;
         }
 
-        $currentValues = static::getenvValues();
-        $allValues = array_merge($currentValues, $values);
+        $currentValues = self::getAllGetenvVariables();
 
-        foreach (array_keys($allValues) as $key) {
+        $allKeys = array_unique(
+            array_merge(
+                array_keys($currentValues),
+                array_keys($newValues)
+            )
+        );
+
+        foreach ($allKeys as $key) {
 
             // add or keep
-            if (array_key_exists($key, $values)) {
+            if (array_key_exists($key, $newValues)) {
 
                 // update if different
-                $value = $values[$key];
-                if ((!isset($currentValues[$key])) || ($currentValues[$key] != $value)) {
+                $value = $newValues[$key];
+                if ((!isset($currentValues[$key])) || ($currentValues[$key] !== $value)) {
                     putenv("$key=$value");
                 }
             } else {
+
                 // remove
                 putenv((string) $key);
             }

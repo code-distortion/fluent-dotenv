@@ -20,7 +20,7 @@ class PopulateGetenvAction extends AbstractPopulationAction
      */
     protected function applyFromValueStore(ValueStore $values)
     {
-        $getenvValues = GetenvSupport::getenvValues();
+        $getenvValues = GetenvSupport::getAllGetenvVariables();
 
         foreach ($values->all() as $key => $value) {
             if (($this->overrideExisting) || (!array_key_exists($key, $getenvValues))) {
@@ -28,7 +28,7 @@ class PopulateGetenvAction extends AbstractPopulationAction
             }
         }
 
-        GetenvSupport::replaceGetenv($getenvValues);
+        GetenvSupport::replaceAllGetenvVariables($getenvValues);
 
         return $this;
     }

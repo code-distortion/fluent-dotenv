@@ -8,7 +8,7 @@ namespace CodeDistortion\FluentDotEnv\Exceptions;
 class DependencyException extends FluentDotEnvException
 {
     /**
-     * A dot-env package  could not be found.
+     * A dot-env package could not be found.
      *
      * @return self
      */

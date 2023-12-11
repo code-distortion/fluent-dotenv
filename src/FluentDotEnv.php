@@ -214,7 +214,7 @@ class FluentDotEnv
      *
      * @param string|string[] $path The path to the .env file.
      * @return static
-     * @throws DependencyException  When a .env loading package cannot be found (eg. vlucas/phpdotenv).
+     * @throws DependencyException  When a .env loading package cannot be found (e.g. vlucas/phpdotenv).
      * @throws InvalidPathException When the .env file could not be loaded.
      * @throws AlreadyLoadedException When .env values have already been loaded.
      */
@@ -230,7 +230,7 @@ class FluentDotEnv
      *
      * @param string|string[] $path The path to the .env file.
      * @return static
-     * @throws DependencyException When a .env loading package cannot be found (eg. vlucas/phpdotenv).
+     * @throws DependencyException When a .env loading package cannot be found (e.g. vlucas/phpdotenv).
      * @throws AlreadyLoadedException When .env values have already been loaded.
      */
     public function safeLoad($path)
@@ -245,7 +245,7 @@ class FluentDotEnv
      * @param string[] $paths  The .env paths to load.
      * @param boolean  $safely Should the exception be absorbed when a .env file could not be loaded?.
      * @return static
-     * @throws DependencyException    When a .env loading package cannot be found (eg. vlucas/phpdotenv).
+     * @throws DependencyException    When a .env loading package cannot be found (e.g. vlucas/phpdotenv).
      * @throws InvalidPathException   When the .env file could not be loaded.
      * @throws AlreadyLoadedException When .env values have already been loaded.
      */
@@ -527,12 +527,18 @@ class FluentDotEnv
     {
         $values = [];
         foreach ($keys as $key) {
+
             $value = $this->valueStore->get($key);
+            $value = is_string($value)
+                ? $value
+                : '';
+
             $values[$key] = ($castMethod
                 ? $this->$castMethod($value)
                 : $value
             );
         }
+
         return ($needsArray ? $values : reset($values));
     }
 

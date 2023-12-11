@@ -10,14 +10,14 @@ class ValueStore
     /**
      * The imported values.
      *
-     * @var mixed[]
+     * @var array<string, mixed>
      */
     private $values;
 
     /**
      * The imported values - before any filtering.
      *
-     * @var mixed[]
+     * @var array<string, mixed>
      */
     private $original;
 
@@ -32,7 +32,7 @@ class ValueStore
     /**
      * Constructor.
      *
-     * @param mixed[] $values The imported values.
+     * @param array<string, mixed> $values The imported values.
      */
     public function __construct(array $values = [])
     {
@@ -48,6 +48,7 @@ class ValueStore
     public function merge(ValueStore $valueStore)
     {
         foreach (func_get_args() as $valueStore) {
+            /** @var ValueStore $valueStore */
             $this->original = array_merge(
                 $this->original,
                 $valueStore->original
@@ -92,7 +93,7 @@ class ValueStore
     /**
      * Return all of the stored values.
      *
-     * @return mixed[]
+     * @return array<string, mixed>
      */
     public function all()
     {

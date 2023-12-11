@@ -2,7 +2,8 @@
 
 namespace CodeDistortion\FluentDotEnv\DotEnvAdapters\VLucas;
 
-use CodeDistortion\FluentDotEnv\Exceptions\InvalidPathException;
+use CodeDistortion\FluentDotEnv\DotEnvAdapters\AbstractDotEnvAdapter;
+use CodeDistortion\FluentDotEnv\DotEnvAdapters\DotEnvAdapterTrait;
 use CodeDistortion\FluentDotEnv\Misc\ValueStore;
 use Dotenv\Dotenv;
 use Dotenv\Environment\Adapter\ServerConstAdapter;
@@ -13,48 +14,22 @@ use Throwable;
 /**
  * Adapter for vlucas/phpdotenv v3.
  */
-class VLucasAdapterV3 extends AbstractVLucasAdapter
+class VLucasAdapterV3 extends AbstractDotEnvAdapter
 {
-    /**
-     * Load the values from the given .env file, and return them.
-     *
-     * NOTE: This MUST leave the getenv(), $_ENV, $_SERVER etc values as they were to begin with.
-     *
-     * @param string $path The path to the .env file.
-     * @return ValueStore
-     * @throws InvalidPathException When the directory or file could not be used.
-     * @throws Throwable            Rethrows any Throwable exception.
-     */
-    public function import(string $path): ValueStore
-    {
-        $origServer = $_SERVER;
+    use DotEnvAdapterTrait;
 
-        try {
-            $values = $this->runImport($path);
-        } catch (Throwable $e) {
 
-            throw ($e instanceof DotEnvInvalidPathException
-                ? InvalidPathException::invalidPath($path, $e)
-                : $e);
-
-        } finally {
-            $_SERVER = $origServer;
-        }
-
-        return $values;
-    }
 
     /**
-     * Actually import the data from the given .env path
+     * Read the data from the given .env path.
      *
      * @param string $path The path to the .env file.
      * @return ValueStore
      */
-    private function runImport(string $path): ValueStore
+    protected function importValuesFromEnvFile(string $path): ValueStore
     {
-        $_SERVER = [];
-
-        list($directory, $filename) = $this->splitPath($path);
+        $directory = $this->getDir($path);
+        $filename = $this->getFilename($path);
 
         // ImportAndPopulate determines what was imported based on $_SERVER
         // and chooses what to update based on that
@@ -63,5 +38,35 @@ class VLucasAdapterV3 extends AbstractVLucasAdapter
         $dotenv->load();
 
         return new ValueStore($_SERVER);
+    }
+
+
+
+    /**
+     * Check if the given exception is because the .env file could not be opened.
+     *
+     * @param Throwable $e The exception to check.
+     * @return boolean
+     */
+    protected function exceptionIsBecauseFileCantBeOpened(Throwable $e): bool
+    {
+        return $e instanceof DotEnvInvalidPathException;
+    }
+
+
+
+    /**
+     * Work out if the import process will update the getenv() values.
+     *
+     * If it doesn't, then the process of backing up and clearing the getenv() values can be skipped.
+     *
+     * @return boolean
+     */
+    protected function importWillUpdateGetenvValues(): bool
+    {
+        // not needed because vlucas/phpdotenv v3 is being used in a way where
+        // it doesn't update getenv() values, it only populates $_SERVER
+        // - see use of ServerConstAdapter() above
+        return false;
     }
 }

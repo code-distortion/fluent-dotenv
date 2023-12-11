@@ -2,8 +2,7 @@
 
 namespace CodeDistortion\FluentDotEnv\DotEnvAdapters;
 
-use CodeDistortion\FluentDotEnv\DotEnvAdapters\Symfony\SymfonyAdapter3;
-use CodeDistortion\FluentDotEnv\DotEnvAdapters\Symfony\SymfonyAdapter4Plus;
+use CodeDistortion\FluentDotEnv\DotEnvAdapters\Symfony\SymfonyAdapter;
 use CodeDistortion\FluentDotEnv\DotEnvAdapters\VLucas\VLucasAdapterV1;
 use CodeDistortion\FluentDotEnv\DotEnvAdapters\VLucas\VLucasAdapterV2;
 use CodeDistortion\FluentDotEnv\DotEnvAdapters\VLucas\VLucasAdapterV3;
@@ -15,7 +14,6 @@ use Dotenv\Dotenv as DotenvV2;
 use Dotenv\Dotenv as DotenvV4;
 use Dotenv\Dotenv as DotenvV5;
 use Dotenv\Environment\DotenvFactory as DotenvFactoryV3;
-use ReflectionMethod;
 use Symfony\Component\Dotenv\Dotenv as SymfonyDotenv;
 
 /**
@@ -56,7 +54,6 @@ class DotEnvAdapterPicker
      * Detect the version of vlucas/phpdotenv installed.
      *
      * @return DotEnvAdapterInterface|null
-     * @throws DependencyException When the vlucas/phpdotenv package cannot be found.
      */
     public static function detectVLucasPhpDotEnv()
     {
@@ -78,25 +75,11 @@ class DotEnvAdapterPicker
      * Detect the version of symfony/dotenv installed.
      *
      * @return DotEnvAdapterInterface|null
-     * @throws DependencyException When the symfony/dotenv package cannot be found.
      */
     public static function detectSymfonyDotEnv()
     {
-        if (class_exists(SymfonyDotenv::class)) {
-
-            // before version 3.3.7, symfony/dotenv's Dotenv::populate(..) method checked to see if each value is
-            // present in getenv(..) first before importing it. An extra step needs to be taken to compensate for this.
-
-            // to try and detect a change after this so the extra work can be removed, this code looks for the 'void'
-            // return type in the Dotenv::load(..) method which was added in version 4.0.0
-            $reflectionMethod = new ReflectionMethod(SymfonyDotenv::class, 'load');
-            $returnType = $reflectionMethod->getReturnType();
-            $returnTypeName = !is_null($returnType) ? $returnType->getName() : null;
-            if ($returnTypeName == 'void') {
-                return new SymfonyAdapter4Plus();
-            }
-            return new SymfonyAdapter3();
-        }
-        return null;
+        return class_exists(SymfonyDotenv::class)
+            ? new SymfonyAdapter()
+            : null;
     }
 }
