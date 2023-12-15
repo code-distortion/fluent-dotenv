@@ -6,10 +6,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 
 
-## [0.1.7] - 2023-12-01
+## [0.2.0] - 2023-12-16
 
 ### Added
 - Added support for PHP 8.3
+- Updated GitHub Actions workflow to improve platform coverage
+- Warning in the documentation that putenv() (which isn't thread-safe) is used to change the getenv() variables temporarily during the .env loading process, when using symfony/dotenv < 5.1.0
+- Added support for symfony/dotenv ^7.0
+
+### Fixed
+- Fixed bugs when using symfony/dotenv with old versions of PHP on Windows
+
+### Changed
+- Removed usage of putenv() temporarily during the .env loading process from all usage of vlucas/phpdotenv (see just below about the new minimum version requirement)
+- Removed usage of putenv() temporarily during the .env loading process from usage of symfony/dotenv 5.1.0+
+
+### Removed
+- Removed support for (very old versions of) vlucas/phpdotenv < 1.1 - to ensure putenv() isn't used during the .env loading process
 
 
 

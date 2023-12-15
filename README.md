@@ -2,11 +2,11 @@
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/code-distortion/fluent-dotenv.svg?style=flat-square)](https://packagist.org/packages/code-distortion/fluent-dotenv)
 ![PHP Version](https://img.shields.io/badge/PHP-7.0%20to%208.3-blue?style=flat-square)
-![vlucas/phpdotenv](https://img.shields.io/badge/vlucas%2Fphpdotenv-1+-blue?style=flat-square)
+![vlucas/phpdotenv](https://img.shields.io/badge/vlucas%2Fphpdotenv-1.1+-blue?style=flat-square)
 ![symfony/dotenv](https://img.shields.io/badge/symfony%2Fdotenv-3.3+-blue?style=flat-square)
 [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/code-distortion/fluent-dotenv/run-tests.yml?branch=master&style=flat-square)](https://github.com/code-distortion/fluent-dotenv/actions)
 [![Buy The World a Tree](https://img.shields.io/badge/treeware-%F0%9F%8C%B3-lightgreen?style=flat-square)](https://plant.treeware.earth/code-distortion/fluent-dotenv)
-[![Contributor Covenant](https://img.shields.io/badge/contributor%20covenant-v2.0%20adopted-ff69b4.svg?style=flat-square)](CODE_OF_CONDUCT.md)
+[![Contributor Covenant](https://img.shields.io/badge/contributor%20covenant-v2.0%20adopted-ff69b4.svg?style=flat-square)](.github/CODE_OF_CONDUCT.md)
 
 ***code-distortion/fluent-dotenv*** is a wrapper with a fluent interface for new and old versions of [vlucas/phpdotenv](https://github.com/vlucas/phpdotenv), allowing you to easily read values from .env files.
 
@@ -40,21 +40,26 @@
 
 ## Introduction
 
-.env files are an important tool, allowing for customisation of projects between environments.
+.env files are an important tool as they allow for customisation of projects between environments.
 
-Sometimes when you're building a package you need it to work with multiple versions of vlucas/phpdotenv so your own package can provide coverage. This was the original motivation behind this package.
+Sometimes when you're building a package, to support a wide range of other packages you need it to be able to use multiple versions of [vlucas/phpdotenv](https://github.com/vlucas/phpdotenv) or [symfony/dotenv](https://github.com/symfony/dotenv).
+
+The motivation behind this package is to provide a way to interact with the different versions of these packages with a single interface.
 
 > First released in 2013, [vlucas/phpdotenv](https://github.com/vlucas/phpdotenv) by Vance Lucas and Graham Campbell is the most used PHP solution for loading values from .env files. Please have a look at their page for a more detailed description of what .env files are and why they're used.
+
+> [symfony/dotenv](https://github.com/symfony/dotenv) was first released in 2017 as an alternative that's a part of [Symfony framework](https://github.com/symfony) family.
 
 
 
 ## Overview
 
-This package provides a new fluent interface for vlucas/phpdotenv features, including the ability to:
+This package provides a new fluent interface for [vlucas/phpdotenv](https://github.com/vlucas/phpdotenv) and [symfony/dotenv](https://github.com/symfony/dotenv) features, and adds new features, including the ability to:
 
+- Perform validation - make sure values are *not empty*, are *integers*, *booleans*, are *limited to a specific set of values*, match a *regex* or validate via a *callback*,
 - Specify values to explicitly *pick* or *ignore*,
 - Specify values that are *required*,
-- Perform validation - make sure values are *not empty*, are *integers*, *booleans*, are *limited to a specific set of values*, match a *regex* or validate via a *callback*,
+- Type casting
 - Populate *$_ENV* and *$_SERVER* values if you like, choosing whether to override values that already exist or not.
 
 
@@ -83,7 +88,7 @@ $fDotEnv = FluentDotEnv::new()->load(['path/to/.env', 'path/to/another.env']);
 // don't throw an exception if the file doesn't exist
 $fDotEnv = FluentDotEnv::new()->safeLoad('path/to/missing.env');
 
-// get all the values as an associative array
+// get all the loaded values as an associative array
 $allValues = $fDotEnv->all();
 
 // get a single value
@@ -93,13 +98,13 @@ $host = $fDotEnv->get('HOST');
 $dbCredentials = $fDotEnv->get(['HOST', 'PORT', 'USERNAME', 'PASSWORD']);
 ```
 
-> ***NOTE:*** Over time, vlucas/phpdotenv has improved the way it reads values from .env files (eg. multi-line variables). The underlying version you have will determine how values in .env files are interpreted.
+> ***NOTE:*** Over time, vlucas/phpdotenv and symfony/dotenv have improved the way they interpret values from .env files (e.g. multi-line variables). The underlying version of these package/s you use will determine how the .env values are interpreted.
 
 
 
 ### Filtering
 
-If you only want to load specific keys you can specify them, others from your .env file will be ignored:
+If you only want to load specific keys, you can specify them. Other values from your .env file will be ignored:
 
 ``` php
 $fDotEnv = FluentDotEnv::new()
@@ -141,7 +146,7 @@ $fDotEnv = FluentDotEnv::new()
     ->integer(['MY_KEY1', 'MY_KEY2'])
 
     // when these keys exist, make sure they are boolean strings
-    // ie. "true", "false", "On", "Off", "Yes", "No", "1" and "0"
+    // i.e. "true", "false", "On", "Off", "Yes", "No", "1" and "0"
     ->boolean('MY_KEY')
     ->boolean(['MY_KEY1', 'MY_KEY2'])
 
@@ -208,7 +213,7 @@ $integers = $fDotEnv->castInteger(['MY_KEY1', 'MY_KEY2']);
 
 ### Populating $_ENV and $_SERVER superglobals
 
-The $_ENV and $_SERVER superglobals can be populated with the imported values:
+The $_ENV and $_SERVER superglobals can be populated with the loaded values:
 
 ``` php
 $fDotEnv = FluentDotEnv::new()
@@ -229,15 +234,21 @@ $fDotEnv = FluentDotEnv::new()
 
 
 
-### Putenv and getenv
+### Putenv() and getenv()
 
-`putenv(…)` and `getenv(…)` are not thread-safe. For this reason this functionality is not included in this package.
+The `putenv(…)` and `getenv(…)` functions are not thread-safe. For this reason this functionality is not included in this package.
+
+> ***NOTE:*** symfony/dotenv [added an option to turn off the use of putenv()](https://github.com/symfony/dotenv/commit/e1f27138406a700c01d4e05e861226bb0c28b83a#diff-b73348fec7eb6dfdb482d959a985979c5bead6091837e488319d75983556f5e7R74-L74) in version 5.1.0. Before that it uses putenv() without a way to turn it off.
+> 
+> FluentDotEnv hides this away, leaving your environment variables the same as they were before loading. ***But***, it means that environment variables are changed temporarily during the load process which [may cause issues in a multi-threaded environment](https://github.com/symfony/symfony/discussions/49928).
+>
+> If you're using symfony/dotenv, you may want to consider using version 5.1.0 or higher.
 
 
 
 ### Calling order
 
-The methods above can be called *before* or *after* loading values from .env files. eg.
+It doesn't matter which order you call the methods above in, they can be called *before* or *after* loading values from .env files. e.g.
 
 ``` php
 $fDotEnv = FluentDotEnv::new()
@@ -263,7 +274,7 @@ $fDotEnv = FluentDotEnv::new()
 
 [symfony/dotenv](https://github.com/symfony/dotenv) was first released in 2017 and is another commonly used dotenv reader.
 
-You can use symfony/dotenv to read .env files by calling `useSymfonyDotEnv()` before calling `load()`. eg.
+You can use symfony/dotenv to read .env files by calling `useSymfonyDotEnv()` before calling `load()`. e.g.
 
 ``` php
 $fDotEnv = FluentDotEnv::new()
@@ -295,7 +306,7 @@ Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed re
 
 ### SemVer
 
-This library uses [SemVer 2.0.0](https://semver.org/) versioning. This means that changes to `X` indicate a breaking change: `0.0.X`, `0.X.y`, `X.y.z`. When this library changes to version 1.0.0, 2.0.0 and so forth it doesn't indicate that it's necessarily a notable release, it simply indicates that the changes were breaking.
+This library uses [SemVer 2.0.0](https://semver.org/) versioning. This means that changes to `X` indicate a breaking change: `0.0.X`, `0.X.y`, `X.y.z`. When this library changes to version 1.0.0, 2.0.0 and so forth, it doesn't indicate that it's necessarily a notable release, it simply indicates that the changes were breaking.
 
 
 
@@ -307,13 +318,13 @@ This package is [Treeware](https://treeware.earth). If you use it in production,
 
 ## Contributing
 
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
+Please see [CONTRIBUTING](.github/CONTRIBUTING.md) for details.
 
 
 
 ### Code of Conduct
 
-Please see [CODE_OF_CONDUCT](CODE_OF_CONDUCT.md) for details.
+Please see [CODE_OF_CONDUCT](.github/CODE_OF_CONDUCT.md) for details.
 
 
 
