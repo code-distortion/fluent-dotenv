@@ -9,14 +9,14 @@ use CodeDistortion\FluentDotEnv\FluentDotEnv;
 use CodeDistortion\FluentDotEnv\Tests\PHPUnitTestCase;
 
 /**
- * Test the ConfigDTO class
+ * Test the FluentDotEnv class
  *
  * @phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
  */
-class FluentDotEnvTest extends PHPUnitTestCase
+class FluentDotEnvUnitTest extends PHPUnitTestCase
 {
     /**
-     * This method is called before each test.
+     * This method is called before many of the tests.
      *
      * This isn't inside setUp() because the signature needs to match across php versions.
      *
@@ -49,6 +49,149 @@ class FluentDotEnvTest extends PHPUnitTestCase
             $fDotEnv->useSymfonyDotEnv();
         }
         return $fDotEnv;
+    }
+
+
+
+    /**
+     * Test that values can be read, validated, and that $_ENV and $_SERVER are populated appropriately.
+     *
+     * @test
+     * @dataProvider CanImportProperlyDataProvider
+     * @param boolean                                  $useSafeLoad       Whether to use ->safeLoad() instead of
+     *                                                                    ->load() or not.
+     * @param string|null                              $envFilename       The name of the .env file to load.
+     * @param string[]|null                            $pick              The keys to pick - ignores the rest.
+     * @param string[]|null                            $ignore            The keys to ignore.
+     * @param string[]|null                            $required          The required values.
+     * @param string[]|null                            $notEmpty          The values that cannot be empty when present.
+     * @param string[]|null                            $integer           The values that must be integers when
+     *                                                                    present.
+     * @param string[]|null                            $boolean           The values that must be booleans when
+     *                                                                    present.
+     * @param string[]|null                            $allowedValues     The allowed values certain keys.
+     * @param string[]|null                            $regex             The regex to validate against.
+     * @param callable|callable[]|string|string[]|null $callback          The callbacks to validate with.
+//     * @param boolean|null                             $updateGetenv      Whether to update getenv() or not.
+     * @param boolean|null                             $updateEnv         Whether to update $_ENV or not.
+     * @param boolean|null                             $updateServer      Whether to update $_SERVER or not.
+     * @param boolean|null                             $override          Whether to override values that already
+     *                                                                    exist.
+     * @param string[]                                 $expectedValues    The expected values read from the .env file.
+//     * @param string[]                                 $expectedGetenv    The expected values to appear in the
+     *                                                                    getenv() results.
+     * @param string[]                                 $expectedEnv       The expected values to appear in the
+     *                                                                    $_ENV super-global.
+     * @param string[]                                 $expectedServer    The expected values to appear in the
+     *                                                                    $_SERVER super-global.
+     * @param string|null                              $expectedException The expected exception class.
+     * @return void
+     */
+    public function can_import_properly(
+        bool $useSafeLoad,
+        $envFilename,
+        $pick,
+        $ignore,
+        $required,
+        $notEmpty,
+        $integer,
+        $boolean,
+        $allowedValues,
+        $regex,
+        $callback,
+//        $updateGetenv,
+        $updateEnv,
+        $updateServer,
+        $override,
+        array $expectedValues,
+//        array $expectedGetenv,
+        array $expectedEnv,
+        array $expectedServer,
+        string $expectedException = null
+    ) {
+
+        $this->customSetUp();
+
+        $fDotEnv = self::newFluentDotEnv();
+
+        // pre-import actions
+        if (!is_null($pick)) {
+            $fDotEnv->pick($pick);
+        }
+        if (!is_null($ignore)) {
+            $fDotEnv->ignore($ignore);
+        }
+
+        // validation actions
+        if (!is_null($required)) {
+            $fDotEnv->required($required);
+        }
+        if (!is_null($notEmpty)) {
+            $fDotEnv->notEmpty($notEmpty);
+        }
+        if (!is_null($integer)) {
+            $fDotEnv->integer($integer);
+        }
+        if (!is_null($boolean)) {
+            $fDotEnv->boolean($boolean);
+        }
+        if (!is_null($allowedValues)) {
+            $fDotEnv->allowedValues($allowedValues);
+        }
+        if (!is_null($regex)) {
+            $fDotEnv->regex($regex);
+        }
+        if (!is_null($callback)) {
+            $fDotEnv->callback($callback);
+        }
+
+        // populate actions
+//        if ($updateGetenv) {
+//            if (!is_null($override)) {
+//                $fDotEnv->populateGetEnv($override);
+//            } else {
+//                $fDotEnv->populateGetEnv();
+//            }
+//        }
+        if ($updateEnv) {
+            if (!is_null($override)) {
+                $fDotEnv->populateEnv($override);
+            } else {
+                $fDotEnv->populateEnv();
+            }
+        }
+        if ($updateServer) {
+            if (!is_null($override)) {
+                $fDotEnv->populateServer($override);
+            } else {
+                $fDotEnv->populateServer();
+            }
+        }
+
+
+        // act + assert
+        if ($expectedException) {
+            $this->assertThrows(
+                $expectedException,
+                function () use (&$fDotEnv, $useSafeLoad, $envFilename) {
+
+                    $useSafeLoad
+                        ? $fDotEnv->safeLoad(__DIR__ . '/input/' . $envFilename)
+                        : $fDotEnv->load(__DIR__ . '/input/' . $envFilename);
+                }
+            );
+        } else {
+            $values = $useSafeLoad
+                ? $fDotEnv->safeLoad(__DIR__ . '/input/' . $envFilename)->all()
+                : $fDotEnv->load(__DIR__ . '/input/' . $envFilename)->all();
+
+            $this->assertSame($expectedValues, $values);
+//            foreach ($expectedGetenv as $key => $value) {
+//                $this->assertSame($value, getenv($key));
+//            }
+            $this->assertSame($expectedEnv, $_ENV);
+            $this->assertSame($expectedServer, $_SERVER);
+        }
     }
 
     /**
@@ -383,148 +526,49 @@ class FluentDotEnvTest extends PHPUnitTestCase
         foreach ($combinations as $index => $combination) {
             $combinations[$index] = array_merge($default, $combination);
         }
-$combinations = ['filename 2' => $combinations['filename 2']];
+
         return $combinations;
     }
 
+
+
     /**
-     * Test that values can be read, validated, and that $_ENV and $_SERVER are populated appropriately.
+     * Test the different ways that various methods can be called.
      *
      * @test
-     * @dataProvider CanImportProperlyDataProvider
-     * @param boolean                                  $useSafeLoad       Whether to use ->safeLoad() instead of
-     *                                                                    ->load() or not.
-     * @param string|null                              $envFilename       The name of the .env file to load.
-     * @param string[]|null                            $pick              The keys to pick - ignores the rest.
-     * @param string[]|null                            $ignore            The keys to ignore.
-     * @param string[]|null                            $required          The required values.
-     * @param string[]|null                            $notEmpty          The values that cannot be empty when present.
-     * @param string[]|null                            $integer           The values that must be integers when
-     *                                                                    present.
-     * @param string[]|null                            $boolean           The values that must be booleans when
-     *                                                                    present.
-     * @param string[]|null                            $allowedValues     The allowed values certain keys.
-     * @param string[]|null                            $regex             The regex to validate against.
-     * @param callable|callable[]|string|string[]|null $callback          The callbacks to validate with.
-//     * @param boolean|null                             $updateGetenv      Whether to update getenv() or not.
-     * @param boolean|null                             $updateEnv         Whether to update $_ENV or not.
-     * @param boolean|null                             $updateServer      Whether to update $_SERVER or not.
-     * @param boolean|null                             $override          Whether to override values that already
-     *                                                                    exist.
-     * @param string[]                                 $expectedValues    The expected values read from the .env file.
-//     * @param string[]                                 $expectedGetenv    The expected values to appear in the
-     *                                                                    getenv() results.
-     * @param string[]                                 $expectedEnv       The expected values to appear in the
-     *                                                                    $_ENV super-global.
-     * @param string[]                                 $expectedServer    The expected values to appear in the
-     *                                                                    $_SERVER super-global.
-     * @param string|null                              $expectedException The expected exception class.
+     * @dataProvider CanCallMethodsInDifferentWaysDataProvider
+     * @param mixed[][]   $methodsAndParams  The methods to call and the parameters to pass to them.
+     * @param string[]    $expectedValues    The expected values read from the .env file.
+     * @param string|null $expectedException The expected exception class.
      * @return void
      */
-    public function can_import_properly(
-        bool $useSafeLoad,
-        $envFilename,
-        $pick,
-        $ignore,
-        $required,
-        $notEmpty,
-        $integer,
-        $boolean,
-        $allowedValues,
-        $regex,
-        $callback,
-//        $updateGetenv,
-        $updateEnv,
-        $updateServer,
-        $override,
+    public function can_call_methods_in_different_ways(
+        array $methodsAndParams,
         array $expectedValues,
-//        array $expectedGetenv,
-        array $expectedEnv,
-        array $expectedServer,
         string $expectedException = null
     ) {
-
         $this->customSetUp();
 
         $fDotEnv = self::newFluentDotEnv();
 
-        // pre-import actions
-        if (!is_null($pick)) {
-            $fDotEnv->pick($pick);
-        }
-        if (!is_null($ignore)) {
-            $fDotEnv->ignore($ignore);
-        }
-
-        // validation actions
-        if (!is_null($required)) {
-            $fDotEnv->required($required);
-        }
-        if (!is_null($notEmpty)) {
-            $fDotEnv->notEmpty($notEmpty);
-        }
-        if (!is_null($integer)) {
-            $fDotEnv->integer($integer);
-        }
-        if (!is_null($boolean)) {
-            $fDotEnv->boolean($boolean);
-        }
-        if (!is_null($allowedValues)) {
-            $fDotEnv->allowedValues($allowedValues);
-        }
-        if (!is_null($regex)) {
-            $fDotEnv->regex($regex);
-        }
-        if (!is_null($callback)) {
-            $fDotEnv->callback($callback);
+        foreach ($methodsAndParams as $oneMethodAndParams) {
+            $method = $oneMethodAndParams['method'];
+            $parameters = $oneMethodAndParams['parameters'];
+            $callable = [$fDotEnv, $method]; /** @var callable $callable */
+            call_user_func_array($callable, $parameters);
         }
 
-        // populate actions
-//        if ($updateGetenv) {
-//            if (!is_null($override)) {
-//                $fDotEnv->populateGetEnv($override);
-//            } else {
-//                $fDotEnv->populateGetEnv();
-//            }
-//        }
-        if ($updateEnv) {
-            if (!is_null($override)) {
-                $fDotEnv->populateEnv($override);
-            } else {
-                $fDotEnv->populateEnv();
-            }
-        }
-        if ($updateServer) {
-            if (!is_null($override)) {
-                $fDotEnv->populateServer($override);
-            } else {
-                $fDotEnv->populateServer();
-            }
-        }
-
-
-        // act + assert
+         // act + assert
         if ($expectedException) {
             $this->assertThrows(
                 $expectedException,
-                function () use (&$fDotEnv, $useSafeLoad, $envFilename) {
-
-                    $useSafeLoad
-                        ? $fDotEnv->safeLoad(__DIR__ . '/input/' . $envFilename)
-                        : $fDotEnv->load(__DIR__ . '/input/' . $envFilename);
+                function () use (&$fDotEnv) {
+                    $fDotEnv->load(__DIR__ . '/input/.env');
                 }
             );
         } else {
-            $values = $useSafeLoad
-                ? $fDotEnv->safeLoad(__DIR__ . '/input/' . $envFilename)->all()
-                : $fDotEnv->load(__DIR__ . '/input/' . $envFilename)->all();
-
+            $values = $fDotEnv->load(__DIR__ . '/input/.env')->all();
             $this->assertSame($expectedValues, $values);
-//            foreach ($expectedGetenv as $key => $value) {
-//                $this->assertSame($value, getenv($key));
-//            }
-            $this->assertSame($expectedEnv, $_ENV);
-            $this->assertSame($expectedServer, $_SERVER);
         }
     }
 
@@ -564,9 +608,9 @@ $combinations = ['filename 2' => $combinations['filename 2']];
             $validKey,
             $invalidKey,
             $expectedValues,
-            $throwExeceptionWhenInvalidValuePresent
+            $throwExceptionWhenInvalidValuePresent
         ) {
-            $expectedException = ($throwExeceptionWhenInvalidValuePresent ? ValidationException::class : null);
+            $expectedException = ($throwExceptionWhenInvalidValuePresent ? ValidationException::class : null);
 
             return [
                 // ->integer('KEY')
@@ -686,9 +730,9 @@ $combinations = ['filename 2' => $combinations['filename 2']];
             $key2,
             $validValue,
             $invalidValue,
-            $throwExeceptionWhenInvalidValuePresent
+            $throwExceptionWhenInvalidValuePresent
         ) {
-            $expectedException = ($throwExeceptionWhenInvalidValuePresent ? ValidationException::class : null);
+            $expectedException = ($throwExceptionWhenInvalidValuePresent ? ValidationException::class : null);
 
             return [
                 // ->regex('KEY', '/^valid$/');
@@ -890,43 +934,46 @@ $combinations = ['filename 2' => $combinations['filename 2']];
         return $combinations;
     }
 
+
+
     /**
-     * Test the different ways that various methods can be called.
+     * Test that the validation methods can be called after ->load() has been run.
      *
      * @test
-     * @dataProvider CanCallMethodsInDifferentWaysDataProvider
-     * @param mixed[][]   $methodsAndParams  The methods to call and the parameters to pass to them.
-     * @param string[]    $expectedValues    The expected values read from the .env file.
+     * @dataProvider canCallValidationAfterLoadDataProvider
+     * @param string      $method            The validation method to call.
+     * @param mixed[]     $params            The parameters to pass to the method.
+     * @param mixed[]     $expectedValues    The expected values.
      * @param string|null $expectedException The expected exception class.
      * @return void
      */
-    public function can_call_methods_in_different_ways(
-        array $methodsAndParams,
+    public function can_call_validation_after_load(
+        string $method,
+        array $params,
         array $expectedValues,
         string $expectedException = null
     ) {
+
         $this->customSetUp();
-
-        $fDotEnv = self::newFluentDotEnv();
-
-        foreach ($methodsAndParams as $oneMethodAndParams) {
-            $method = $oneMethodAndParams['method'];
-            $parameters = $oneMethodAndParams['parameters'];
-            call_user_func_array([$fDotEnv, $method], $parameters);
+        $fDotEnv = self::newFluentDotEnv()->load(__DIR__ . '/input/.env');
+        $callable = [$fDotEnv, $method];
+        if (!is_callable($callable)) {
+            self::fail();
         }
 
-         // act + assert
         if ($expectedException) {
             $this->assertThrows(
                 $expectedException,
-                function () use (&$fDotEnv) {
-                    $fDotEnv->load(__DIR__ . '/input/.env');
+                function () use ($callable, $params) {
+                    call_user_func_array($callable, $params);
                 }
             );
         } else {
-            $values = $fDotEnv->load(__DIR__ . '/input/.env')->all();
-            $this->assertSame($expectedValues, $values);
+            call_user_func_array($callable, $params);
+            $this->assertTrue(true);
         }
+
+        $this->assertSame($expectedValues, $fDotEnv->all());
     }
 
     /**
@@ -1078,45 +1125,7 @@ $combinations = ['filename 2' => $combinations['filename 2']];
         ];
     }
 
-    /**
-     * Test that the validation methods can be called after ->load() has been run.
-     *
-     * @test
-     * @dataProvider canCallValidationAfterLoadDataProvider
-     * @param string      $method            The validation method to call.
-     * @param mixed[]     $params            The parameters to pass to the method.
-     * @param mixed[]     $expectedValues    The expected values.
-     * @param string|null $expectedException The expected exception class.
-     * @return void
-     */
-    public function can_call_validation_after_load(
-        string $method,
-        array $params,
-        array $expectedValues,
-        string $expectedException = null
-    ) {
 
-        $this->customSetUp();
-        $fDotEnv = self::newFluentDotEnv()->load(__DIR__ . '/input/.env');
-        $callable = [$fDotEnv, $method];
-        if (!is_callable($callable)) {
-            self::fail();
-        }
-
-        if ($expectedException) {
-            $this->assertThrows(
-                $expectedException,
-                function () use ($callable, $params) {
-                    call_user_func_array($callable, $params);
-                }
-            );
-        } else {
-            call_user_func_array($callable, $params);
-            $this->assertTrue(true);
-        }
-
-        $this->assertSame($expectedValues, $fDotEnv->all());
-    }
 
     /**
      * Test that the pick method works after values have been loaded.
@@ -1231,6 +1240,25 @@ $combinations = ['filename 2' => $combinations['filename 2']];
         $this->assertSame(['MY_VALUE1' => 'b'], $fDotEnv->all());
     }
 
+
+
+    /**
+     * Test that values are cast properly.
+     *
+     * @test
+     * @dataProvider canCastProperlyDataProvider
+     *
+     * @param string $castMethod The cast method to call.
+     * @param string $key        The key to retrieve.
+     * @param mixed  $expected   The expected result from the cast call.
+     * @return void
+     */
+    public function can_cast_properly(string $castMethod, string $key, $expected)
+    {
+        $fDotEnv = self::newFluentDotEnv()->safeLoad(__DIR__ . '/input/cast.env');
+        $this->assertSame($expected, $fDotEnv->$castMethod($key));
+    }
+
     /**
      * Generate data for the can_cast_properly test below.
      *
@@ -1317,21 +1345,28 @@ $combinations = ['filename 2' => $combinations['filename 2']];
         return $return;
     }
 
+
+
     /**
-     * Test that values are cast properly.
+     * Test that values are retrieved properly when getting several at once.
      *
      * @test
-     * @dataProvider canCastProperlyDataProvider
+     * @dataProvider canGetMultipleValuesDataProvider
      *
-     * @param string $castMethod The cast method to call.
-     * @param string $key        The key to retrieve.
-     * @param mixed  $expected   The expected result from the cast call.
+     * @param string              $method   The method to fetch values with.
+     * @param string[]|string[][] $params   The parameters to pass.
+     * @param mixed[]|boolean     $expected The expected result from the cast call.
      * @return void
      */
-    public function can_cast_properly(string $castMethod, string $key, $expected)
+    public function can_get_multiple_values(string $method, array $params, $expected)
     {
-        $fDotEnv = self::newFluentDotEnv()->safeLoad(__DIR__ . '/input/cast.env');
-        $this->assertSame($expected, $fDotEnv->$castMethod($key));
+        $fDotEnv = self::newFluentDotEnv()->safeLoad(__DIR__ . '/input/many_values.env');
+
+        $callable = [$fDotEnv, $method];
+        if (is_callable($callable)) {
+            $output = call_user_func_array($callable, $params);
+            $this->assertSame($expected, $output);
+        }
     }
 
     /**
@@ -1500,27 +1535,7 @@ $combinations = ['filename 2' => $combinations['filename 2']];
         ];
     }
 
-    /**
-     * Test that values are retrieved properly when getting several at once.
-     *
-     * @test
-     * @dataProvider canGetMultipleValuesDataProvider
-     *
-     * @param string              $method   The method to fetch values with.
-     * @param string[]|string[][] $params   The parameters to pass.
-     * @param mixed[]|boolean     $expected The expected result from the cast call.
-     * @return void
-     */
-    public function can_get_multiple_values(string $method, array $params, $expected)
-    {
-        $fDotEnv = self::newFluentDotEnv()->safeLoad(__DIR__ . '/input/many_values.env');
 
-        $callable = [$fDotEnv, $method];
-        if (is_callable($callable)) {
-            $output = call_user_func_array($callable, $params);
-            $this->assertSame($expected, $output);
-        }
-    }
 
     /**
      * Test that the ->load() doesn't change the existing getenv(), $_SERVER and $_ENV values.
@@ -1528,7 +1543,7 @@ $combinations = ['filename 2' => $combinations['filename 2']];
      * @test
      * @return void
      */
-    public function current_env_values_arent_changed_by_loading_process()
+    public function current_env_values_arent_changed_by_the_loading_process()
     {
         $this->customSetUp();
 

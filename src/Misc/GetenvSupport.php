@@ -21,19 +21,11 @@ class GetenvSupport
         }
 
         // getenv() requires a $key to be passed to it before PHP 7.1
-        try {
-
-            return @(array) getenv();
-
-        } catch (Throwable $e) {
-
-            // if needed, get the getenv() values individually
-            $values = [];
-            foreach (array_keys($_ENV) as $key) {
-                $values[$key] = getenv($key);
-            }
-            return $values;
+        if (version_compare(PHP_VERSION, '7.1.0', '<')) {
+            return self::getParticularGetenvVariables(array_keys($_ENV));
         }
+
+        return @(array) getenv();
     }
 
     /**

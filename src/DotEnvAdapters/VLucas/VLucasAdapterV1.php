@@ -65,9 +65,9 @@ class VLucasAdapterV1 extends AbstractDotEnvAdapter
     {
         // custom class VLucasV1Dotenv overrides Dotenv's setEnvironmentVariable() method
         // to remove the putenv() and $_ENV lines. HOWEVER:
-        // version <= 1.0.6 don't have the setEnvironmentVariable() method
-        // version <= 1.0.9 some issues in overriding setEnvironmentVariable()
-        // version ^1.1.0 is required in composer.json to avoid problems with these old versions
+        // - version <= 1.0.6 doesn't use the setEnvironmentVariable() method in the first place
+        // - version <= 1.0.9 has some issues in overriding setEnvironmentVariable()
+        // - version ^1.1.0 is required in composer.json to avoid problems with these old versions
 
         // otherwise…
         // not needed because vlucas/phpdotenv v1 is being used in a way where

@@ -15,7 +15,7 @@ trait DotEnvAdapterTrait
      * @param string $path The path to the .env file.
      * @return string
      */
-    protected function getDir(string $path): string
+    private function getDir(string $path): string
     {
         $temp = explode('/', $path);
         array_pop($temp); // remove the filename
@@ -28,7 +28,7 @@ trait DotEnvAdapterTrait
      * @param string $path The path to the .env file.
      * @return string
      */
-    protected function getFilename(string $path): string
+    private function getFilename(string $path): string
     {
         $temp = explode('/', $path);
         return array_pop($temp);

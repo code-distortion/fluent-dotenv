@@ -51,7 +51,7 @@ class DotEnvAdapterPicker
     }
 
     /**
-     * Detect the version of vlucas/phpdotenv installed.
+     * Detect the version of vlucas/phpdotenv installed and return the appropriate adapter.
      *
      * @return DotEnvAdapterInterface|null
      */
@@ -72,7 +72,7 @@ class DotEnvAdapterPicker
     }
 
     /**
-     * Detect the version of symfony/dotenv installed.
+     * Detect the version of symfony/dotenv installed and return the appropriate adapter.
      *
      * @return DotEnvAdapterInterface|null
      */
