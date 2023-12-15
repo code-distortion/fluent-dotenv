@@ -35,7 +35,7 @@ class FluentDotEnv
      *
      * @var string[]
      */
-    private $adapterOrder = ['vlucas'];
+    private $adapterOrder = ['vlucas', 'symfony'];
 
     /**
      * The store for imported values.

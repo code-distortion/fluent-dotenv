@@ -2,13 +2,13 @@
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/code-distortion/fluent-dotenv.svg?style=flat-square)](https://packagist.org/packages/code-distortion/fluent-dotenv)
 ![PHP Version](https://img.shields.io/badge/PHP-7.0%20to%208.3-blue?style=flat-square)
-![vlucas/phpdotenv](https://img.shields.io/badge/vlucas%2Fphpdotenv-1.1+-blue?style=flat-square)
-![symfony/dotenv](https://img.shields.io/badge/symfony%2Fdotenv-3.3+-blue?style=flat-square)
+[![vlucas/phpdotenv](https://img.shields.io/badge/vlucas%2Fphpdotenv-1.1%20to%205.x-blue?style=flat-square)](https://github.com/vlucas/phpdotenv)
+[![symfony/dotenv](https://img.shields.io/badge/symfony%2Fdotenv-3.3%20to%207.x-blue?style=flat-square)](https://github.com/symfony/dotenv)
 [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/code-distortion/fluent-dotenv/run-tests.yml?branch=master&style=flat-square)](https://github.com/code-distortion/fluent-dotenv/actions)
 [![Buy The World a Tree](https://img.shields.io/badge/treeware-%F0%9F%8C%B3-lightgreen?style=flat-square)](https://plant.treeware.earth/code-distortion/fluent-dotenv)
-[![Contributor Covenant](https://img.shields.io/badge/contributor%20covenant-v2.0%20adopted-ff69b4.svg?style=flat-square)](.github/CODE_OF_CONDUCT.md)
+[![Contributor Covenant](https://img.shields.io/badge/contributor%20covenant-v2.1%20adopted-ff69b4.svg?style=flat-square)](.github/CODE_OF_CONDUCT.md)
 
-***code-distortion/fluent-dotenv*** is a wrapper with a fluent interface for new and old versions of [vlucas/phpdotenv](https://github.com/vlucas/phpdotenv), allowing you to easily read values from .env files.
+***code-distortion/fluent-dotenv*** is a wrapper with a fluent interface for new and old versions of [vlucas/phpdotenv](https://github.com/vlucas/phpdotenv) and [symfony/dotenv](https://github.com/symfony/dotenv), allowing you to easily read values from .env files.
 
 
 
@@ -22,11 +22,11 @@
     * [Filtering](#filtering)
     * [Validation](#validation)
     * [Casting values](#casting-values)
-    * [Populating $_ENV and $_SERVER superglobals](#populating-_env-and-_server-superglobals)
-    * [Putenv and getenv](#putenv-and-getenv)
     * [Calling order](#calling-order)
-* [Other dotenv reader packages - symfony/dotenv](#other-dotenv-reader-packages---symfonydotenv)
-* [Testing](#testing)
+    * [Populating $_ENV and $_SERVER superglobals](#populating-_env-and-_server-superglobals)
+    * [Putenv() and getenv()](#putenv-and-getenv)
+    * [Picking vlucas/phpdotenv or symfony/dotenv](#picking-vlucasphpdotenv-or-symfonydotenv)
+* [Testing This Package](#testing-this-package)
 * [Changelog](#changelog)
     * [SemVer](#semver)
 * [Treeware](#treeware)
@@ -42,9 +42,9 @@
 
 .env files are an important tool as they allow for customisation of projects between environments.
 
-Sometimes when you're building a package, to support a wide range of other packages you need it to be able to use multiple versions of [vlucas/phpdotenv](https://github.com/vlucas/phpdotenv) or [symfony/dotenv](https://github.com/symfony/dotenv).
+The motivation behind this package is to provide a way to interact with the different versions of [vlucas/phpdotenv](https://github.com/vlucas/phpdotenv) or [symfony/dotenv](https://github.com/symfony/dotenv) with a single interface.
 
-The motivation behind this package is to provide a way to interact with the different versions of these packages with a single interface.
+This has been helpful for me when building packages that need to support a wide range of other packages.
 
 > First released in 2013, [vlucas/phpdotenv](https://github.com/vlucas/phpdotenv) by Vance Lucas and Graham Campbell is the most used PHP solution for loading values from .env files. Please have a look at their page for a more detailed description of what .env files are and why they're used.
 
@@ -54,12 +54,12 @@ The motivation behind this package is to provide a way to interact with the diff
 
 ## Overview
 
-This package provides a new fluent interface for [vlucas/phpdotenv](https://github.com/vlucas/phpdotenv) and [symfony/dotenv](https://github.com/symfony/dotenv) features, and adds new features, including the ability to:
+This package provides a new fluent interface for [vlucas/phpdotenv](https://github.com/vlucas/phpdotenv) and [symfony/dotenv](https://github.com/symfony/dotenv), and adds new features, including the ability to:
 
 - Perform validation - make sure values are *not empty*, are *integers*, *booleans*, are *limited to a specific set of values*, match a *regex* or validate via a *callback*,
 - Specify values to explicitly *pick* or *ignore*,
 - Specify values that are *required*,
-- Type casting
+- Type casting to *boolean* or *integer*,
 - Populate *$_ENV* and *$_SERVER* values if you like, choosing whether to override values that already exist or not.
 
 
@@ -71,6 +71,16 @@ Install the package via composer:
 ``` bash
 composer require code-distortion/fluent-dotenv
 ```
+
+You must also include either vlucas/phpdotenv or symfony/dotenv in your project:
+
+``` bash
+composer require vlucas/phpdotenv
+# or
+composer require symfony/dotenv
+```
+
+FluentDotEnv will automatically detect which of these dotenv packages are installed and use it. You can also [choose](#picking-vlucasphpdotenv-or-symfonydotenv) explicitly if you like.
 
 
 
@@ -211,41 +221,6 @@ $integers = $fDotEnv->castInteger(['MY_KEY1', 'MY_KEY2']);
 
 
 
-### Populating $_ENV and $_SERVER superglobals
-
-The $_ENV and $_SERVER superglobals can be populated with the loaded values:
-
-``` php
-$fDotEnv = FluentDotEnv::new()
-
-    // add the loaded values to $_ENV
-    ->populateEnv()
-    // add values to $_ENV and override values that already exist
-    ->populateEnv(true)
-
-    // add the loaded values to $_SERVER
-    ->populateServer()
-    // add values to $_SERVER and override values that already exist
-    ->populateServer(true)
-
-    // the values are added when load is called
-    ->load('path/to/.env');
-```
-
-
-
-### Putenv() and getenv()
-
-The `putenv(…)` and `getenv(…)` functions are not thread-safe. For this reason this functionality is not included in this package.
-
-> ***NOTE:*** symfony/dotenv [added an option to turn off the use of putenv()](https://github.com/symfony/dotenv/commit/e1f27138406a700c01d4e05e861226bb0c28b83a#diff-b73348fec7eb6dfdb482d959a985979c5bead6091837e488319d75983556f5e7R74-L74) in version 5.1.0. Before that it uses putenv() without a way to turn it off.
-> 
-> FluentDotEnv hides this away, leaving your environment variables the same as they were before loading. ***But***, it means that environment variables are changed temporarily during the load process which [may cause issues in a multi-threaded environment](https://github.com/symfony/symfony/discussions/49928).
->
-> If you're using symfony/dotenv, you may want to consider using version 5.1.0 or higher.
-
-
-
 ### Calling order
 
 It doesn't matter which order you call the methods above in, they can be called *before* or *after* loading values from .env files. e.g.
@@ -270,31 +245,78 @@ $fDotEnv = FluentDotEnv::new()
 
 
 
-## Other dotenv reader packages - symfony/dotenv
+### Populating $_ENV and $_SERVER superglobals
 
-[symfony/dotenv](https://github.com/symfony/dotenv) was first released in 2017 and is another commonly used dotenv reader.
+By default, the $_ENV and $_SERVER superglobals are not changed when loading .env values.
 
-You can use symfony/dotenv to read .env files by calling `useSymfonyDotEnv()` before calling `load()`. e.g.
+However, you can choose to populate them by calling `populateEnv(…)` and `populateServer(…)` respectively. e.g.
+
+``` php
+$fDotEnv = FluentDotEnv::new()
+
+    // add the loaded values to $_ENV
+    ->populateEnv()
+    // add values to $_ENV and override values that already exist
+    ->populateEnv(true)
+
+    // add the loaded values to $_SERVER
+    ->populateServer()
+    // add values to $_SERVER and override values that already exist
+    ->populateServer(true)
+
+    // the values are added when load is called
+    ->load('path/to/.env');
+```
+
+
+
+### Putenv() and getenv()
+
+The `putenv(…)` and `getenv(…)` functions are not thread-safe which may cause issues in a multi-threaded environment. For this reason this functionality is not included in this package. You can read discussion about this [here](https://github.com/vlucas/phpdotenv/issues/76) and [here](https://github.com/symfony/symfony/discussions/49928).
+
+> ***NOTE:*** symfony/dotenv [added an option to turn off the use of putenv()](https://github.com/symfony/dotenv/commit/e1f27138406a700c01d4e05e861226bb0c28b83a#diff-b73348fec7eb6dfdb482d959a985979c5bead6091837e488319d75983556f5e7R74-L74) in version 5.1.0. FluentDotEnv uses this. In earlier versions, it uses putenv() without a way to turn it off.
+> 
+> FluentDotEnv hides this away, leaving your environment variables the same as they were before loading. ***But***, it means that environment variables are changed temporarily during the `->load()` process.
+>
+> If you're using symfony/dotenv, you may want to consider using version 5.1.0 or higher.
+
+
+
+### Picking vlucas/phpdotenv or symfony/dotenv
+
+You need to include either vlucas/phpdotenv or symfony/dotenv in your project:
+
+``` bash
+composer require vlucas/phpdotenv
+# or
+composer require symfony/dotenv
+```
+
+FluentDotEnv will try to use vlucas/phpdotenv first, then symfony/dotenv.
+
+If you have both installed and want to be particular about which one is used, you can call `useVlucasPhpDotEnv()` or `useSymfonyDotEnv()` before calling `load()`. e.g.
+
+``` php
+$fDotEnv = FluentDotEnv::new()
+    ->useVlucasPhpDotEnv()
+    ->load('path/to/.env');
+```
 
 ``` php
 $fDotEnv = FluentDotEnv::new()
     ->useSymfonyDotEnv()
-    ->load('path/to/.env')
+    ->load('path/to/.env');
 ```
 
-> ***NOTE:*** `symfony/dotenv` must be included in your project as a dependency for this to work.
-
-``` bash
-composer require symfony/dotenv
-```
+If neither are found, a `CodeDistortion\FluentDotEnv\Exceptions\DependencyException` will be thrown.
 
 
 
-## Testing
+## Testing This Package
 
-``` bash
-composer test
-```
+- Clone this package: `git clone https://github.com/code-distortion/fluent-dotenv.git .`
+- Run `composer install` to install dependencies
+- Run the tests: `composer test`
 
 
 

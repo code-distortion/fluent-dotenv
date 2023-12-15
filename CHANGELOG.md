@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 
 
+## [0.3.0] - 2023-12-16
+
+### Changed
+- Removed vlusas/phpdotenv from the list of dependencies - the choice of whether to use this or symfony/dotenv is now up to the user
+
+
+
 ## [0.2.0] - 2023-12-16
 
 ### Added
