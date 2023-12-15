@@ -65,5 +65,9 @@
             "ocramius/package-versions": true,
             "infection/extension-installer": true
         }
+    },
+    "suggest": {
+        "vlucas/phpdotenv": "Allows you to easily read values from .env files",
+        "symfony/dotenv": "Allows you to easily read values from .env files"
     }
 }

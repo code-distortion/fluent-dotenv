@@ -1371,7 +1371,7 @@ $combinations = ['filename 2' => $combinations['filename 2']];
             'get() - three params as separate params' => [
                 'method' => 'get',
                 'params' => ['ONE', 'TWO', 'THREE'],
-                'expected' => ['ONE' => '1', 'TWO' => '2',  'THREE' => '3'],
+                'expected' => ['ONE' => '1', 'TWO' => '2', 'THREE' => '3'],
             ],
             'get() - mixed params and array 1' => [
                 'method' => 'get',
@@ -1381,17 +1381,17 @@ $combinations = ['filename 2' => $combinations['filename 2']];
             'get() - mixed params and array 2' => [
                 'method' => 'get',
                 'params' => ['ONE', ['TWO', 'THREE']],
-                'expected' => ['ONE' => '1', 'TWO' => '2',  'THREE' => '3'],
+                'expected' => ['ONE' => '1', 'TWO' => '2', 'THREE' => '3'],
             ],
             'get() - mixed params and array 3' => [
                 'method' => 'get',
                 'params' => [['ONE'], ['TWO', 'THREE']],
-                'expected' => ['ONE' => '1', 'TWO' => '2',  'THREE' => '3'],
+                'expected' => ['ONE' => '1', 'TWO' => '2', 'THREE' => '3'],
             ],
             'get() - mixed params and array 4' => [
                 'method' => 'get',
                 'params' => [['ONE', 'TWO'], 'THREE'],
-                'expected' => ['ONE' => '1', 'TWO' => '2',  'THREE' => '3'],
+                'expected' => ['ONE' => '1', 'TWO' => '2', 'THREE' => '3'],
             ],
 
             // INTEGER
@@ -1423,7 +1423,7 @@ $combinations = ['filename 2' => $combinations['filename 2']];
             'castInteger() - three params as separate params' => [
                 'method' => 'castInteger',
                 'params' => ['ONE', 'TWO', 'THREE'],
-                'expected' => ['ONE' => 1, 'TWO' => 2,  'THREE' => 3],
+                'expected' => ['ONE' => 1, 'TWO' => 2, 'THREE' => 3],
             ],
             'castInteger() - mixed params and array 1' => [
                 'method' => 'castInteger',
@@ -1433,17 +1433,17 @@ $combinations = ['filename 2' => $combinations['filename 2']];
             'castInteger() - mixed params and array 2' => [
                 'method' => 'castInteger',
                 'params' => ['ONE', ['TWO', 'THREE']],
-                'expected' => ['ONE' => 1, 'TWO' => 2,  'THREE' => 3],
+                'expected' => ['ONE' => 1, 'TWO' => 2, 'THREE' => 3],
             ],
             'castInteger() - mixed params and array 3' => [
                 'method' => 'castInteger',
                 'params' => [['ONE'], ['TWO', 'THREE']],
-                'expected' => ['ONE' => 1, 'TWO' => 2,  'THREE' => 3],
+                'expected' => ['ONE' => 1, 'TWO' => 2, 'THREE' => 3],
             ],
             'castInteger() - mixed params and array 4' => [
                 'method' => 'castInteger',
                 'params' => [['ONE', 'TWO'], 'THREE'],
-                'expected' => ['ONE' => 1, 'TWO' => 2,  'THREE' => 3],
+                'expected' => ['ONE' => 1, 'TWO' => 2, 'THREE' => 3],
             ],
 
             // BOOLEAN
@@ -1475,7 +1475,7 @@ $combinations = ['filename 2' => $combinations['filename 2']];
             'castBoolean() - three params as separate params' => [
                 'method' => 'castBoolean',
                 'params' => ['TRUE', 'FALSE', 'YES'],
-                'expected' => ['TRUE' => true, 'FALSE' => false,  'YES' => true],
+                'expected' => ['TRUE' => true, 'FALSE' => false, 'YES' => true],
             ],
             'castBoolean() - mixed params and array 1' => [
                 'method' => 'castBoolean',
@@ -1485,17 +1485,17 @@ $combinations = ['filename 2' => $combinations['filename 2']];
             'castBoolean() - mixed params and array 2' => [
                 'method' => 'castBoolean',
                 'params' => ['TRUE', ['FALSE', 'YES']],
-                'expected' => ['TRUE' => true, 'FALSE' => false,  'YES' => true],
+                'expected' => ['TRUE' => true, 'FALSE' => false, 'YES' => true],
             ],
             'castBoolean() - mixed params and array 3' => [
                 'method' => 'castBoolean',
                 'params' => [['TRUE'], ['FALSE', 'YES']],
-                'expected' => ['TRUE' => true, 'FALSE' => false,  'YES' => true],
+                'expected' => ['TRUE' => true, 'FALSE' => false, 'YES' => true],
             ],
             'castBoolean() - mixed params and array 4' => [
                 'method' => 'castBoolean',
                 'params' => [['TRUE', 'FALSE'], 'YES'],
-                'expected' => ['TRUE' => true, 'FALSE' => false,  'YES' => true],
+                'expected' => ['TRUE' => true, 'FALSE' => false, 'YES' => true],
             ],
         ];
     }
