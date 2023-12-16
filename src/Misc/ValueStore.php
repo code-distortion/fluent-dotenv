@@ -75,7 +75,7 @@ class ValueStore
      *
      * @return void
      */
-    public function recalculateValues()
+    private function recalculateValues()
     {
         if (is_null($this->pickKeys)) {
             $this->values = $this->original;
