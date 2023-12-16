@@ -64,6 +64,8 @@ abstract class AbstractDotEnvAdapter implements DotEnvAdapterInterface
      */
     public function import(string $path): ValueStore
     {
+        $path = $this->normalisePathSeparators($path);
+
         try {
 
             $this->recordCurrentEnvValues($path);
@@ -85,6 +87,19 @@ abstract class AbstractDotEnvAdapter implements DotEnvAdapterInterface
         }
 
         return $valueStore;
+    }
+
+
+
+    /**
+     * Normalise the separators in a path, so they're the same on any OS.
+     *
+     * @param string $path The path to normalise.
+     * @return string
+     */
+    private function normalisePathSeparators(string $path): string
+    {
+        return str_replace('\\', '/', $path);
     }
 
 

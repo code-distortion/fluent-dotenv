@@ -19,7 +19,7 @@ trait DotEnvAdapterTrait
     {
         $temp = explode('/', $path);
         array_pop($temp); // remove the filename
-        return implode('/', $temp);
+        return implode(DIRECTORY_SEPARATOR, $temp);
     }
 
     /**
@@ -33,6 +33,8 @@ trait DotEnvAdapterTrait
         $temp = explode('/', $path);
         return array_pop($temp);
     }
+
+
 
     /**
      * Get the content of a file in the local filesystem.

@@ -61,14 +61,14 @@ class FluentDotEnvUnitTest extends PHPUnitTestCase
      * @param boolean                                  $useSafeLoad       Whether to use ->safeLoad() instead of
      *                                                                    ->load() or not.
      * @param string|null                              $envFilename       The name of the .env file to load.
+     * @param boolean                                  $useWindowsDirSep  Whether to use Windows directory separator or
+     *                                                                    not.
      * @param string[]|null                            $pick              The keys to pick - ignores the rest.
      * @param string[]|null                            $ignore            The keys to ignore.
      * @param string[]|null                            $required          The required values.
      * @param string[]|null                            $notEmpty          The values that cannot be empty when present.
-     * @param string[]|null                            $integer           The values that must be integers when
-     *                                                                    present.
-     * @param string[]|null                            $boolean           The values that must be booleans when
-     *                                                                    present.
+     * @param string[]|null                            $integer           The values that must be integers when present.
+     * @param string[]|null                            $boolean           The values that must be booleans when present.
      * @param string[]|null                            $allowedValues     The allowed values certain keys.
      * @param string[]|null                            $regex             The regex to validate against.
      * @param callable|callable[]|string|string[]|null $callback          The callbacks to validate with.
@@ -79,17 +79,18 @@ class FluentDotEnvUnitTest extends PHPUnitTestCase
      *                                                                    exist.
      * @param string[]                                 $expectedValues    The expected values read from the .env file.
 //     * @param string[]                                 $expectedGetenv    The expected values to appear in the
-     *                                                                    getenv() results.
-     * @param string[]                                 $expectedEnv       The expected values to appear in the
-     *                                                                    $_ENV super-global.
-     * @param string[]                                 $expectedServer    The expected values to appear in the
-     *                                                                    $_SERVER super-global.
+//     *                                                                    getenv() results.
+     * @param string[]                                 $expectedEnv       The expected values to appear in the $_ENV
+     *                                                                    super-global.
+     * @param string[]                                 $expectedServer    The expected values to appear in the $_SERVER
+     *                                                                    super-global.
      * @param string|null                              $expectedException The expected exception class.
      * @return void
      */
     public function can_import_properly(
         bool $useSafeLoad,
         $envFilename,
+        $useWindowsDirSep,
         $pick,
         $ignore,
         $required,
@@ -168,22 +169,28 @@ class FluentDotEnvUnitTest extends PHPUnitTestCase
             }
         }
 
+        $envPath = __DIR__ . '/input/' . $envFilename;
+        if ($useWindowsDirSep) {
+            $envPath = str_replace('/', '\\', $envPath);
+        }
+
+
 
         // act + assert
         if ($expectedException) {
             $this->assertThrows(
                 $expectedException,
-                function () use (&$fDotEnv, $useSafeLoad, $envFilename) {
+                function () use (&$fDotEnv, $useSafeLoad, $envPath) {
 
                     $useSafeLoad
-                        ? $fDotEnv->safeLoad(__DIR__ . '/input/' . $envFilename)
-                        : $fDotEnv->load(__DIR__ . '/input/' . $envFilename);
+                        ? $fDotEnv->safeLoad($envPath)
+                        : $fDotEnv->load($envPath);
                 }
             );
         } else {
             $values = $useSafeLoad
-                ? $fDotEnv->safeLoad(__DIR__ . '/input/' . $envFilename)->all()
-                : $fDotEnv->load(__DIR__ . '/input/' . $envFilename)->all();
+                ? $fDotEnv->safeLoad($envPath)->all()
+                : $fDotEnv->load($envPath)->all();
 
             $this->assertSame($expectedValues, $values);
 //            foreach ($expectedGetenv as $key => $value) {
@@ -250,6 +257,7 @@ class FluentDotEnvUnitTest extends PHPUnitTestCase
         $default = [
             'useSafeLoad' => false,
             'envFilename' => '.env',
+            'useWindowsDirSep' => false,
             'pick' => null,
             'ignore' => null,
             'required' => null,
@@ -526,6 +534,8 @@ class FluentDotEnvUnitTest extends PHPUnitTestCase
         foreach ($combinations as $index => $combination) {
             $combinations[$index] = array_merge($default, $combination);
         }
+
+        $combinations[] = array_merge($default, ['useWindowsDirSep' => true]);
 
         return $combinations;
     }
