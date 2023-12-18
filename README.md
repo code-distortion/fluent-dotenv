@@ -1,7 +1,7 @@
-# Fluent dotenv
+# FluentDotEnv
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/code-distortion/fluent-dotenv.svg?style=flat-square)](https://packagist.org/packages/code-distortion/fluent-dotenv)
-![PHP Version](https://img.shields.io/badge/PHP-7.0%20to%208.3-blue?style=flat-square)
+[![PHP Version](https://img.shields.io/badge/PHP-7.0%20to%208.3-blue?style=flat-square)](https://php.net)
 [![vlucas/phpdotenv](https://img.shields.io/badge/vlucas%2Fphpdotenv-1.1%20to%205.x-blue?style=flat-square)](https://github.com/vlucas/phpdotenv)
 [![symfony/dotenv](https://img.shields.io/badge/symfony%2Fdotenv-3.3%20to%207.x-blue?style=flat-square)](https://github.com/symfony/dotenv)
 [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/code-distortion/fluent-dotenv/run-tests.yml?branch=master&style=flat-square)](https://github.com/code-distortion/fluent-dotenv/actions)
@@ -272,13 +272,13 @@ $fDotEnv = FluentDotEnv::new()
 
 ### Putenv() and getenv()
 
-The `putenv(…)` and `getenv(…)` functions are not thread-safe which may cause issues in a multi-threaded environment. For this reason this functionality is not included in this package. You can read discussion about this [here](https://github.com/vlucas/phpdotenv/issues/76) and [here](https://github.com/symfony/symfony/discussions/49928).
+The `putenv(…)` and `getenv(…)` functions are not thread-safe, which may cause issues in a multi-threaded environment. For this reason this functionality is not included in this package. You can read discussion about this [here](https://github.com/vlucas/phpdotenv/issues/76) and [here](https://github.com/symfony/symfony/discussions/49928).
 
-> ***NOTE:*** symfony/dotenv [added an option to turn off the use of putenv()](https://github.com/symfony/dotenv/commit/e1f27138406a700c01d4e05e861226bb0c28b83a#diff-b73348fec7eb6dfdb482d959a985979c5bead6091837e488319d75983556f5e7R74-L74) in version 5.1.0. FluentDotEnv uses this. In earlier versions, it uses putenv() without a way to turn it off.
+> ***NOTE:*** If you're using symfony/dotenv, you may want to consider using version 5.1.0 or higher…
+>
+> symfony/dotenv [added an option to turn off the use of putenv()](https://github.com/symfony/dotenv/commit/e1f27138406a700c01d4e05e861226bb0c28b83a#diff-b73348fec7eb6dfdb482d959a985979c5bead6091837e488319d75983556f5e7R74-L74) in version 5.1.0. FluentDotEnv uses this to make sure the environment variables don't get changed. However, in earlier versions putenv() is used without a way to turn it off.
 > 
 > FluentDotEnv hides this away, leaving your environment variables the same as they were before loading. ***But***, it means that environment variables are changed temporarily during the `->load()` process.
->
-> If you're using symfony/dotenv, you may want to consider using version 5.1.0 or higher.
 
 
 

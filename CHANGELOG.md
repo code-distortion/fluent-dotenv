@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 
 
+## [0.3.1] - 2023-12-18
+
+### Fixed
+- Added the ability to load .env files with Windows directory separators (i.e. "\\") in the path - thanks to [Tomas Nev](https://github.com/tmsnvd) for [identifying the problem](https://github.com/tmsnvd/fluent-dotenv/commit/0c8b7b2f9c04903ffc7b562bac28b58eb26468eb)
+
+
+
 ## [0.3.0] - 2023-12-16
 
 ### Changed
