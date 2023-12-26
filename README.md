@@ -8,7 +8,7 @@
 [![Buy The World a Tree](https://img.shields.io/badge/treeware-%F0%9F%8C%B3-lightgreen?style=flat-square)](https://plant.treeware.earth/code-distortion/fluent-dotenv)
 [![Contributor Covenant](https://img.shields.io/badge/contributor%20covenant-v2.1%20adopted-ff69b4.svg?style=flat-square)](.github/CODE_OF_CONDUCT.md)
 
-***code-distortion/fluent-dotenv*** is a wrapper with a fluent interface for new and old versions of [vlucas/phpdotenv](https://github.com/vlucas/phpdotenv) and [symfony/dotenv](https://github.com/symfony/dotenv), allowing you to easily read values from .env files.
+***code-distortion/fluent-dotenv*** is a wrapper with a fluent interface for new and old versions of [vlucas/phpdotenv](https://github.com/vlucas/phpdotenv) and [symfony/dotenv](https://github.com/symfony/dotenv), providing a common interface to easily read values from .env files.
 
 
 

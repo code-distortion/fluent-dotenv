@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 
 
+## [0.3.2] - 2023-12-27
+
+### Fixed
+- Changed dependency phpcsstandards/php_codesniffer back to squizlabs/php_codesniffer - Thanks to [jrfnl for the update](https://github.com/code-distortion/fluent-dotenv/commit/48d01dde1020869eeceef35ecc65d31500681ed5)
+
+
+
 ## [0.3.1] - 2023-12-18
 
 ### Fixed
