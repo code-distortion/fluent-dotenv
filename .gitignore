@@ -6,9 +6,11 @@ infection/
 phpunit/
 phpunit.cache/
 vendor/
+vendor.*/
 .phpunit.result.cache
 composer.lock
-infection.json5
+infection.json
+phpcs.xml
 phpstan.neon
 phpunit.xml
 tests/Unit/ManualTest.php

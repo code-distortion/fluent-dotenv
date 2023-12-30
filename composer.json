@@ -46,7 +46,7 @@
         }
     },
     "scripts": {
-        "infection": "vendor/bin/infection --threads=max --show-mutations",
+        "infection": "vendor/bin/infection --threads=max --show-mutations --test-framework-options=\"--exclude-group=skip\"",
         "phpcbf": "vendor/bin/phpcbf",
         "phpcs": "vendor/bin/phpcs",
         "phpstan": "vendor/bin/phpstan.phar analyse --level=max",
