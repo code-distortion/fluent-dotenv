@@ -4,6 +4,14 @@
 
 
 
+#### Versions:
+
+- FluentDotEnv version:
+- PHP version:
+- OS + version:
+
+
+
 #### Detailed Description:
 
 <!-- Please provide a detailed description of the issue here, if needed -->
@@ -13,14 +21,6 @@
 #### Current Behaviour:
 
 <!-- Please explain the current behaviour here -->
-
-
-
-#### Versions:
-
-- Fluent dotenv version:
-- PHP version:
-- OS + version:
 
 
 
@@ -35,3 +35,9 @@
 #### Expected Behaviour:
 
 <!-- Please explain the behaviour you would expect here -->
+
+
+
+#### Additional Information:
+
+<!-- Please add any extra information that you might think is relevant -->
