@@ -4,6 +4,10 @@ namespace CodeDistortion\FluentDotEnv\Tests\Unit;
 
 use CodeDistortion\FluentDotEnv\Misc\ValueStore;
 use CodeDistortion\FluentDotEnv\Tests\PHPUnitTestCase;
+use CodeDistortion\FluentDotEnv\Tests\Unit\Support\AssignClassAlias;
+use PHPUnit\Framework\Attributes\Test;
+
+AssignClassAlias::databaseBuilderSetUpTrait(__NAMESPACE__);
 
 /**
  * Test the ValueStore class
@@ -12,12 +16,18 @@ use CodeDistortion\FluentDotEnv\Tests\PHPUnitTestCase;
  */
 class ValueStoreUnitTest extends PHPUnitTestCase
 {
+    use DatabaseBuilderSetUpTrait; // this is chosen above by AssignClassAlias depending on the PHP version used
+
+
+
     /**
      * Test that an array of initial values can be passed to ValueStore.
      *
      * @test
+     *
      * @return void
      */
+    #[Test]
     public function test_that_valuestore_accepts_values_upon_instantiation()
     {
         $valueStore = new ValueStore(); // no parameters
@@ -33,8 +43,11 @@ class ValueStoreUnitTest extends PHPUnitTestCase
     /**
      * Test that ValueStore lets you retrieve values.
      *
+     * @test
+     *
      * @return void
      */
+    #[Test]
     public function test_that_values_can_be_retrieved()
     {
         $valueStore = new ValueStore(['abc' => 'ABC', 'def' => 'DEF']);
@@ -48,8 +61,11 @@ class ValueStoreUnitTest extends PHPUnitTestCase
     /**
      * Test that ValueStore lets you check if keys are set.
      *
+     * @test
+     *
      * @return void
      */
+    #[Test]
     public function test_that_values_existence_can_be_checked()
     {
         $valueStore = new ValueStore(['abc' => 'ABC', 'def' => 'DEF']);
@@ -70,8 +86,11 @@ class ValueStoreUnitTest extends PHPUnitTestCase
     /**
      * Test that ValueStore lets you pick particular values to use.
      *
+     * @test
+     *
      * @return void
      */
+    #[Test]
     public function test_that_values_are_picked()
     {
         $valueStore = new ValueStore(['abc' => 'ABC', 'def' => 'DEF']);
@@ -92,8 +111,11 @@ class ValueStoreUnitTest extends PHPUnitTestCase
     /**
      * Test that ValueStore lets you forget particular keys.
      *
+     * @test
+     *
      * @return void
      */
+    #[Test]
     public function test_that_values_are_forgotten()
     {
         $valueStore = new ValueStore(['abc' => 'ABC', 'def' => 'DEF']);
@@ -117,8 +139,10 @@ class ValueStoreUnitTest extends PHPUnitTestCase
      * Test that ValueStore objects can be merged.
      *
      * @test
+     *
      * @return void
      */
+    #[Test]
     public function test_that_valuestores_can_be_merged()
     {
         // no values

@@ -2,7 +2,6 @@
 
 namespace CodeDistortion\FluentDotEnv\Tests;
 
-use Jchook\AssertThrows\AssertThrows;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -10,5 +9,4 @@ use PHPUnit\Framework\TestCase;
  */
 class PHPUnitTestCase extends TestCase
 {
-    use AssertThrows;
 }

@@ -401,10 +401,10 @@ class FluentDotEnv
      * Specify keys and closures they need to checked with (an exception is thrown when the closure returns false).
      *
      * @param callable|callable[]|string|string[] $key     The key to specify closures for.
-     * @param callable                            $closure The closure to apply.
+     * @param callable|null                       $closure The closure to apply.
      * @return static
      */
-    public function callback($key, callable $closure = null)
+    public function callback($key, $closure = null)
     {
         return (is_callable($key))
             ? $this->validate($this->callbackGlobalAction, [$key])

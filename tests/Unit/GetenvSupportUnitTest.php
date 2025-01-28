@@ -4,6 +4,10 @@ namespace CodeDistortion\FluentDotEnv\Tests\Unit;
 
 use CodeDistortion\FluentDotEnv\Misc\GetenvSupport;
 use CodeDistortion\FluentDotEnv\Tests\PHPUnitTestCase;
+use CodeDistortion\FluentDotEnv\Tests\Unit\Support\AssignClassAlias;
+use PHPUnit\Framework\Attributes\Test;
+
+AssignClassAlias::databaseBuilderSetUpTrait(__NAMESPACE__);
 
 /**
  * Test the GetenvSupport class
@@ -12,12 +16,18 @@ use CodeDistortion\FluentDotEnv\Tests\PHPUnitTestCase;
  */
 class GetenvSupportUnitTest extends PHPUnitTestCase
 {
+    use DatabaseBuilderSetUpTrait; // this is chosen above by AssignClassAlias depending on the PHP version used
+
+
+
     /**
      * Test GetenvSupport::getAllGetenvVariables().
      *
      * @test
+     *
      * @return void
      */
+    #[Test]
     public function test_retrieval_of_all_getenv_values()
     {
         putenv("one=ONE");
@@ -39,8 +49,10 @@ class GetenvSupportUnitTest extends PHPUnitTestCase
      * Test GetenvSupport::getParticularGetenvVariables().
      *
      * @test
+     *
      * @return void
      */
+    #[Test]
     public function test_retrieval_of_particular_getenv_values()
     {
         putenv("one=ONE");
@@ -60,8 +72,10 @@ class GetenvSupportUnitTest extends PHPUnitTestCase
      * Test GetenvSupport::removeGetenvVariables().
      *
      * @test
+     *
      * @return void
      */
+    #[Test]
     public function test_removal_of_particular_getenv_values()
     {
         putenv("one=ONE");
@@ -83,8 +97,10 @@ class GetenvSupportUnitTest extends PHPUnitTestCase
      * Test GetenvSupport::addGetenvVariables().
      *
      * @test
+     *
      * @return void
      */
+    #[Test]
     public function test_addition_of_new_getenv_values()
     {
         putenv("one=ONE");
@@ -101,8 +117,10 @@ class GetenvSupportUnitTest extends PHPUnitTestCase
      * Test GetenvSupport::replaceAllGetenvVariables().
      *
      * @test
+     *
      * @return void
      */
+    #[Test]
     public function test_the_replacement_of_all_getenv_values()
     {
         putenv("one=ONE (SAME)");

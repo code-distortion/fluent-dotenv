@@ -2,11 +2,17 @@
 
 namespace CodeDistortion\FluentDotEnv\Tests\Unit;
 
+use CodeDistortion\FluentDotEnv\Tests\Unit\Support\AssignClassAlias;
 use CodeDistortion\FluentDotEnv\Exceptions\AlreadyLoadedException;
 use CodeDistortion\FluentDotEnv\Exceptions\InvalidPathException;
 use CodeDistortion\FluentDotEnv\Exceptions\ValidationException;
 use CodeDistortion\FluentDotEnv\FluentDotEnv;
 use CodeDistortion\FluentDotEnv\Tests\PHPUnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
+use Throwable;
+
+AssignClassAlias::databaseBuilderSetUpTrait(__NAMESPACE__);
 
 /**
  * Test the FluentDotEnv class
@@ -15,6 +21,10 @@ use CodeDistortion\FluentDotEnv\Tests\PHPUnitTestCase;
  */
 class FluentDotEnvUnitTest extends PHPUnitTestCase
 {
+    use DatabaseBuilderSetUpTrait; // this is chosen above by AssignClassAlias depending on the PHP version used
+
+
+
     /**
      * This method is called before many of the tests.
      *
@@ -58,6 +68,7 @@ class FluentDotEnvUnitTest extends PHPUnitTestCase
      *
      * @test
      * @dataProvider CanImportProperlyDataProvider
+     *
      * @param boolean                                  $useSafeLoad       Whether to use ->safeLoad() instead of
      *                                                                    ->load() or not.
      * @param string|null                              $envFilename       The name of the .env file to load.
@@ -87,6 +98,8 @@ class FluentDotEnvUnitTest extends PHPUnitTestCase
      * @param string|null                              $expectedException The expected exception class.
      * @return void
      */
+    #[Test]
+    #[DataProvider('CanImportProperlyDataProvider')]
     public function can_import_properly(
         bool $useSafeLoad,
         $envFilename,
@@ -108,7 +121,7 @@ class FluentDotEnvUnitTest extends PHPUnitTestCase
 //        array $expectedGetenv,
         array $expectedEnv,
         array $expectedServer,
-        string $expectedException = null
+        $expectedException = null
     ) {
 
         $this->customSetUp();
@@ -178,15 +191,17 @@ class FluentDotEnvUnitTest extends PHPUnitTestCase
 
         // act + assert
         if ($expectedException) {
-            $this->assertThrows(
-                $expectedException,
-                function () use (&$fDotEnv, $useSafeLoad, $envPath) {
 
-                    $useSafeLoad
-                        ? $fDotEnv->safeLoad($envPath)
-                        : $fDotEnv->load($envPath);
-                }
-            );
+            $caughtException = false;
+            try {
+                $useSafeLoad
+                    ? $fDotEnv->safeLoad($envPath)
+                    : $fDotEnv->load($envPath);
+            } catch (Throwable $e) {
+                $caughtException = $e instanceof $expectedException;
+            }
+            self::assertTrue($caughtException);
+
         } else {
             $values = $useSafeLoad
                 ? $fDotEnv->safeLoad($envPath)->all()
@@ -547,15 +562,18 @@ class FluentDotEnvUnitTest extends PHPUnitTestCase
      *
      * @test
      * @dataProvider CanCallMethodsInDifferentWaysDataProvider
+     *
      * @param mixed[][]   $methodsAndParams  The methods to call and the parameters to pass to them.
      * @param string[]    $expectedValues    The expected values read from the .env file.
      * @param string|null $expectedException The expected exception class.
      * @return void
      */
+    #[Test]
+    #[DataProvider('CanCallMethodsInDifferentWaysDataProvider')]
     public function can_call_methods_in_different_ways(
         array $methodsAndParams,
         array $expectedValues,
-        string $expectedException = null
+        $expectedException = null
     ) {
         $this->customSetUp();
 
@@ -570,12 +588,15 @@ class FluentDotEnvUnitTest extends PHPUnitTestCase
 
          // act + assert
         if ($expectedException) {
-            $this->assertThrows(
-                $expectedException,
-                function () use (&$fDotEnv) {
-                    $fDotEnv->load(__DIR__ . '/input/.env');
-                }
-            );
+
+            $caughtException = false;
+            try {
+                $fDotEnv->load(__DIR__ . '/input/.env');
+            } catch (Throwable $e) {
+                $caughtException = $e instanceof $expectedException;
+            }
+            self::assertTrue($caughtException);
+
         } else {
             $values = $fDotEnv->load(__DIR__ . '/input/.env')->all();
             $this->assertSame($expectedValues, $values);
@@ -951,17 +972,20 @@ class FluentDotEnvUnitTest extends PHPUnitTestCase
      *
      * @test
      * @dataProvider canCallValidationAfterLoadDataProvider
+     *
      * @param string      $method            The validation method to call.
      * @param mixed[]     $params            The parameters to pass to the method.
      * @param mixed[]     $expectedValues    The expected values.
      * @param string|null $expectedException The expected exception class.
      * @return void
      */
+    #[Test]
+    #[DataProvider('canCallValidationAfterLoadDataProvider')]
     public function can_call_validation_after_load(
         string $method,
         array $params,
         array $expectedValues,
-        string $expectedException = null
+        $expectedException = null
     ) {
 
         $this->customSetUp();
@@ -972,12 +996,15 @@ class FluentDotEnvUnitTest extends PHPUnitTestCase
         }
 
         if ($expectedException) {
-            $this->assertThrows(
-                $expectedException,
-                function () use ($callable, $params) {
-                    call_user_func_array($callable, $params);
-                }
-            );
+
+            $caughtException = false;
+            try {
+                call_user_func_array($callable, $params);
+            } catch (Throwable $e) {
+                $caughtException = $e instanceof $expectedException;
+            }
+            self::assertTrue($caughtException);
+
         } else {
             call_user_func_array($callable, $params);
             $this->assertTrue(true);
@@ -1141,8 +1168,10 @@ class FluentDotEnvUnitTest extends PHPUnitTestCase
      * Test that the pick method works after values have been loaded.
      *
      * @test
+     *
      * @return void
      */
+    #[Test]
     public function pick_after_load_works()
     {
         $this->customSetUp();
@@ -1173,8 +1202,10 @@ class FluentDotEnvUnitTest extends PHPUnitTestCase
      * Test that loading multiple .env files works
      *
      * @test
+     *
      * @return void
      */
+    #[Test]
     public function loading_multiple_env_files_works()
     {
         $this->customSetUp();
@@ -1206,39 +1237,44 @@ class FluentDotEnvUnitTest extends PHPUnitTestCase
         $this->assertSame(['MY_VALUE1' => 'a'], $fDotEnv->all());
 
         // ->load called multiple times
-        $this->assertThrows(
-            AlreadyLoadedException::class,
-            function () {
-                self::newFluentDotEnv()
-                    ->load(__DIR__ . '/input/1.env')
-                    ->load(__DIR__ . '/input/2.env');
-            }
-        );
+        $caughtException = false;
+        try {
+            self::newFluentDotEnv()
+                ->load(__DIR__ . '/input/1.env')
+                ->load(__DIR__ . '/input/2.env');
+        } catch (AlreadyLoadedException $e) {
+            $caughtException = true;
+        }
+        self::assertTrue($caughtException);
 
-        $this->assertThrows(
-            AlreadyLoadedException::class,
-            function () {
-                self::newFluentDotEnv()
-                    ->safeLoad(__DIR__ . '/input/1.env')
-                    ->safeLoad(__DIR__ . '/input/2.env');
-            }
-        );
+        $caughtException = false;
+        try {
+            self::newFluentDotEnv()
+                ->safeLoad(__DIR__ . '/input/1.env')
+                ->safeLoad(__DIR__ . '/input/2.env');
+        } catch (AlreadyLoadedException $e) {
+            $caughtException = true;
+        }
+        self::assertTrue($caughtException);
 
         // missing file
-        $this->assertThrows(
-            InvalidPathException::class,
-            function () {
-                self::newFluentDotEnv()
-                    ->load([__DIR__ . '/input/missing.env']);
-            }
-        );
-        $this->assertThrows(
-            InvalidPathException::class,
-            function () {
-                self::newFluentDotEnv()
-                    ->load([__DIR__ . '/input/1.env', __DIR__ . '/input/missing.env', __DIR__ . '/input/2.env']);
-            }
-        );
+        $caughtException = false;
+        try {
+            self::newFluentDotEnv()
+                ->load([__DIR__ . '/input/missing.env']);
+        } catch (InvalidPathException $e) {
+            $caughtException = true;
+        }
+        self::assertTrue($caughtException);
+
+        $caughtException = false;
+        try {
+            self::newFluentDotEnv()
+                ->load([__DIR__ . '/input/1.env', __DIR__ . '/input/missing.env', __DIR__ . '/input/2.env']);
+        } catch (InvalidPathException $e) {
+            $caughtException = true;
+        }
+        self::assertTrue($caughtException);
 
         // missing file - but with safeLoad()
         $fDotEnv = self::newFluentDotEnv()
@@ -1263,6 +1299,8 @@ class FluentDotEnvUnitTest extends PHPUnitTestCase
      * @param mixed  $expected   The expected result from the cast call.
      * @return void
      */
+    #[Test]
+    #[DataProvider('canCastProperlyDataProvider')]
     public function can_cast_properly(string $castMethod, string $key, $expected)
     {
         $fDotEnv = self::newFluentDotEnv()->safeLoad(__DIR__ . '/input/cast.env');
@@ -1368,6 +1406,8 @@ class FluentDotEnvUnitTest extends PHPUnitTestCase
      * @param mixed[]|boolean     $expected The expected result from the cast call.
      * @return void
      */
+    #[Test]
+    #[DataProvider('canGetMultipleValuesDataProvider')]
     public function can_get_multiple_values(string $method, array $params, $expected)
     {
         $fDotEnv = self::newFluentDotEnv()->safeLoad(__DIR__ . '/input/many_values.env');
@@ -1551,8 +1591,10 @@ class FluentDotEnvUnitTest extends PHPUnitTestCase
      * Test that the ->load() doesn't change the existing getenv(), $_SERVER and $_ENV values.
      *
      * @test
+     *
      * @return void
      */
+    #[Test]
     public function current_env_values_arent_changed_by_the_loading_process()
     {
         $this->customSetUp();

@@ -1,7 +1,7 @@
 # FluentDotEnv
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/code-distortion/fluent-dotenv.svg?style=flat-square)](https://packagist.org/packages/code-distortion/fluent-dotenv)
-[![PHP Version](https://img.shields.io/badge/PHP-7.0%20to%208.3-blue?style=flat-square)](https://php.net)
+[![PHP Version](https://img.shields.io/badge/PHP-7.0%20to%208.4-blue?style=flat-square)](https://php.net)
 [![vlucas/phpdotenv](https://img.shields.io/badge/vlucas%2Fphpdotenv-1.1%20to%205.x-blue?style=flat-square)](https://github.com/vlucas/phpdotenv)
 [![symfony/dotenv](https://img.shields.io/badge/symfony%2Fdotenv-3.3%20to%207.x-blue?style=flat-square)](https://github.com/symfony/dotenv)
 [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/code-distortion/fluent-dotenv/run-tests.yml?branch=master&style=flat-square)](https://github.com/code-distortion/fluent-dotenv/actions)
@@ -72,7 +72,7 @@ Install the package via composer:
 composer require code-distortion/fluent-dotenv
 ```
 
-You must also include either vlucas/phpdotenv or symfony/dotenv in your project:
+You must also include either `vlucas/phpdotenv` or `symfony/dotenv` in your project:
 
 ``` bash
 composer require vlucas/phpdotenv

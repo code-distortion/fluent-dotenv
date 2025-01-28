@@ -2,9 +2,9 @@
 <phpunit
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="./vendor/phpunit/phpunit/phpunit.xsd"
-  backupGlobals="true"
+  backupGlobals="false"
   backupStaticAttributes="true"
-  beStrictAboutOutputDuringTests="false"
+  beStrictAboutOutputDuringTests="true"
   bootstrap="vendor/autoload.php"
   colors="false"
   convertDeprecationsToExceptions="false"
@@ -28,7 +28,7 @@
 >
   <testsuites>
     <testsuite name="Unit">
-      <directory suffix="Test.php">./tests/Unit</directory>
+      <directory suffix="Test.php">./tests/Unit/</directory>
     </testsuite>
   </testsuites>
 </phpunit>
